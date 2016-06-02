@@ -194,7 +194,7 @@ int	notecnt;		/* Count for notify (to visual from cmd) */
 bool	numberf;		/* Command should run in number mode */
 char	obuf[BUFSIZ];		/* Buffer for tty output */
 short	oprompt;		/* Saved during source */
-short	ospeed;			/* Output speed (from gtty) */
+speed_t	ex_ospeed;			/* Output speed (from gtty) */
 int	otchng;			/* Backup tchng to find changes in macros */
 short	peekc;			/* Peek ahead character (cmd mode input) */
 char	*pkill[2];		/* Trim for put with ragged (LISP) delete */

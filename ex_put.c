@@ -1051,7 +1051,7 @@ gTTY(i)
 	nlttyc = olttyc;
 # endif
 #else
-	ioctl(i, TCGETA, &tty);
+	tcgetattr(i, &tty);
 #endif
 }
 
@@ -1088,7 +1088,7 @@ sTTY(i)
 
 #else
 	/* USG 3 very simple: just set everything */
-	ioctl(i, TCSETAW, &tty);
+	tcsetattr(i, TCSAFLUSH, &tty);
 #endif
 }
 

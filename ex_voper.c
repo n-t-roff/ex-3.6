@@ -255,7 +255,7 @@ ein:
 		getDOT();
 		forbid(!i);
 		markDOT();
-		if (ospeed > B300)
+		if (ex_ospeed > B300)
 			hold |= HOLDWIG;
 		break;
 
@@ -576,7 +576,7 @@ errlab:
 				wcursor = 0;
 			getDOT();
 		}
-		if (ospeed > B300)
+		if (ex_ospeed > B300)
 			hold |= HOLDWIG;
 		break;
 

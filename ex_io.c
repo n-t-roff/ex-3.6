@@ -678,7 +678,7 @@ putfile()
 	nib = BUFSIZ;
 	fp = genbuf;
 	do {
-		getline(*a1++);
+		ex_getline(*a1++);
 		lp = linebuf;
 		for (;;) {
 			if (--nib < 0) {

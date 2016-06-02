@@ -10,9 +10,9 @@
  * Only exstrings is looked at "+4", i.e. if you give
  * "/usr/lib/..." here, "/lib" will be tried only for strings.
  */
-#include "local/uparm.h"
-#define	EXRECOVER	libpath(ex3.6recover)
-#define	EXPRESERVE	libpath(ex3.6preserve)
+#define libpath(a)	"/usr/local/bin/" a
+#define	EXRECOVER	libpath("ex3.6recover")
+#define	EXPRESERVE	libpath("ex3.6preserve")
 #ifndef VMUNIX
 #define	EXSTRINGS	libpath(ex3.6strings)
 #endif
@@ -45,7 +45,7 @@
 #define	RHSSIZE		256		/* Size of rhs of substitute */
 #define	NBRA		9		/* Number of re \( \) pairs */
 #define	TAGSIZE		32		/* Tag length */
-#define	ONMSZ		64		/* Option name size */
+#define	ONMSZ		256		/* Option name size */
 #define	GBSIZE		256		/* Buffer size */
 #define	UXBSIZE		128		/* Unix command buffer size */
 #define	VBSIZE		128		/* Partial line max size in visual */
@@ -93,9 +93,9 @@
 #define	TUBECOLS	160	/* Number of screen columns for visual */
 #define	TUBESIZE	5000	/* Maximum screen size for visual */
 #else
-#define	TUBELINES	66
-#define	TUBECOLS	160
-#define	TUBESIZE	6600	/* 66 * 100 */
+#define	TUBELINES	100
+#define	TUBECOLS	300
+#define	TUBESIZE	(TUBELINES * TUBECOLS)
 #endif
 
 /*

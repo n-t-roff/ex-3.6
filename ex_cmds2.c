@@ -510,7 +510,7 @@ vcontin(ask)
 			 * Gobble ^Q/^S since the tty driver should be eating
 			 * them (as far as the user can see)
 			 */
-			while (peekkey() == CTRL(Q) || peekkey() == CTRL(S))
+			while (peekkey() == CTRL('Q') || peekkey() == CTRL('S'))
 				ignore(getkey());
 #endif
 			if(getkey() == ':') {

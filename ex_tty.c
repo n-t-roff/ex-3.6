@@ -66,6 +66,7 @@ setterm(type)
 		unknown++;
 		CP(ltcbuf, "xx|dumb:");
 	}
+	gettmode();
 	i = LINES = tgetnum("li");
 	if (LINES <= 5)
 		LINES = 24;
@@ -102,9 +103,9 @@ setterm(type)
 		if (ldisc == NTTYDISC) {
 			sc[0] = olttyc.t_suspc;
 			sc[1] = 0;
-			if (olttyc.t_suspc == CTRL(z)) {
+			if (olttyc.t_suspc == CTRL('z')) {
 				for (i=0; i<=4; i++)
-					if (arrows[i].cap[0] == CTRL(z))
+					if (arrows[i].cap[0] == CTRL('z'))
 						addmac(sc, NULL, NULL, arrows);
 			} else
 				addmac(sc, "\32", "susp", arrows);
@@ -131,7 +132,6 @@ setterm(type)
 		LINES = 2;
 	/* proper strings to change tty type */
 	termreset();
-	gettmode();
 	value(REDRAW) = AL && DL;
 	value(OPTIMIZE) = !CA && !GT;
 	if (ospeed == B1200 && !value(REDRAW))

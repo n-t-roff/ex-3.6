@@ -382,7 +382,7 @@ fixup:
 	 * ^H		Back a character.
 	 */
 	case 'h':
-	case CTRL(h):
+	case CTRL('h'):
 		dir = -1;
 		/* fall into ... */
 
@@ -476,7 +476,7 @@ errlab:
 	 *		console of the VAX since it puts console in LSI mode.
 	 */
 	case 'k':
-	case CTRL(p):
+	case CTRL('p'):
 		wdot = dot - cnt;
 		if (vmoving == 0)
 			vmoving = 1, vmovcol = column(cursor);
@@ -523,7 +523,7 @@ errlab:
 	 *
 	 * LF		Linefeed is a convenient synonym for ^N.
 	 */
-	case CTRL(n):
+	case CTRL('n'):
 	case 'j':
 	case NL:
 		wdot = dot + cnt;
@@ -571,7 +571,7 @@ errlab:
 			markDOT();
 		if (wcursor) {
 			vsave();
-			getline(*wdot);
+			ex_getline(*wdot);
 			if (wcursor > strend(linebuf))
 				wcursor = 0;
 			getDOT();

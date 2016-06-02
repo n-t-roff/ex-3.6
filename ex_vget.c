@@ -118,7 +118,7 @@ again:
 			Peek2key = 0;
 			break;
 		case 'q':	/* f2 -> ^C */
-			c = CTRL(c);
+			c = CTRL('c');
 			Peek2key = 0;
 			break;
 		case 'p':	/* f1 -> esc */
@@ -197,8 +197,8 @@ getesc()
 	c = getkey();
 	switch (c) {
 
-	case CTRL(v):
-	case CTRL(q):
+	case CTRL('v'):
+	case CTRL('q'):
 		c = getkey();
 		return (c);
 
@@ -256,13 +256,13 @@ readecho(c)
 		putchar('\n');
 	vscrap();
 	Pline = OP;
-	if (Peekkey != ATTN && Peekkey != QUIT && Peekkey != CTRL(h)) {
+	if (Peekkey != ATTN && Peekkey != QUIT && Peekkey != CTRL('h')) {
 		cursor = sc;
 		vclreol();
 		return (0);
 	}
 blewit:
-	OPeek = Peekkey==CTRL(h) ? 0 : Peekkey; Peekkey = 0;
+	OPeek = Peekkey==CTRL('h') ? 0 : Peekkey; Peekkey = 0;
 	splitw = 0;
 	vclean();
 	vshow(dot, NOLINE);
@@ -386,7 +386,7 @@ beep()
 	if (VB)
 		vputp(VB, 0);
 	else
-		vputc(CTRL(g));
+		vputc(CTRL('g'));
 }
 
 /*
@@ -578,7 +578,7 @@ char *s;
 	fprintf(trace, "linebuf = '%s'\n", linebuf);
 	for (p=zero+1; p<=truedol; p++) {
 		fprintf(trace, "%o ", *p);
-		getline(*p);
+		ex_getline(*p);
 		fprintf(trace, "'%s'\n", linebuf);
 	}
 	fprintf(trace, "]\n");

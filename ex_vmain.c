@@ -184,9 +184,9 @@ reread:
 		 *		will probably foul this up, but nobody has
 		 *		one of them.
 		 */
-		case CTRL(l):
-		case CTRL(r):
-			if (c == CTRL(l) || (KR && *KR==CTRL(l))) {
+		case CTRL('l'):
+		case CTRL('r'):
+			if (c == CTRL('l') || (KR && *KR==CTRL('l'))) {
 				vclear();
 				vdirty(0, vcnt);
 			}
@@ -292,7 +292,7 @@ reread:
 		 *		redrawn almost as it was.  In this case
 		 *		one should simply move the cursor.
 		 */
-		case CTRL(u):
+		case CTRL('u'):
 			if (hadcnt)
 				vSCROLL = cnt;
 			cnt = vSCROLL;
@@ -308,7 +308,7 @@ reread:
 		/*
 		 * ^D		Scroll down.  Like scroll up.
 		 */
-		case CTRL(d):
+		case CTRL('d'):
 #ifdef TRACE
 		if (trace)
 			fprintf(trace, "before vdown in ^D, dot=%d, wdot=%d, dol=%d\n", lineno(dot), lineno(wdot), lineno(dol));
@@ -337,7 +337,7 @@ reread:
 		 * ^E		Glitch the screen down (one) line.
 		 *		Cursor left on same line in file.
 		 */
-		case CTRL(e):
+		case CTRL('e'):
 			if (state != VISUAL)
 				continue;
 			if (!hadcnt)
@@ -352,7 +352,7 @@ reread:
 		/*
 		 * ^Y		Like ^E but up
 		 */
-		case CTRL(y):
+		case CTRL('y'):
 			if (state != VISUAL)
 				continue;
 			if (!hadcnt)
@@ -401,7 +401,7 @@ reread:
 		 * ^F		Window forwards, with 2 lines of continuity.
 		 *		Count repeats.
 		 */
-		case CTRL(f):
+		case CTRL('f'):
 			vsave();
 			if (vcnt > 2) {
 				addr = dot + (vcnt - vcline) - 2 + (cnt-1)*basWLINES;
@@ -416,7 +416,7 @@ reread:
 		 * ^B		Window backwards, with 2 lines of continuity.
 		 *		Inverse of ^F.
 		 */
-		case CTRL(b):
+		case CTRL('b'):
 			vsave();
 			if (one + vcline != dot && vcnt > 2) {
 				addr = dot - vcline - 2 + (cnt-1)*basWLINES;
@@ -825,7 +825,7 @@ pfixup:
 		 *		Like a :e #, and thus can be used after a
 		 *		"No Write" diagnostic.
 		 */
-		case CTRL(^):
+		case CTRL('^'):
 			forbid (hadcnt);
 			vsave();
 			ckaw();
@@ -840,7 +840,7 @@ pfixup:
 		 * ^]		Takes word after cursor as tag, and then does
 		 *		tag command.  Read ``go right to''.
 		 */
-		case CTRL(]):
+		case CTRL(']'):
 			grabtag();
 			oglobp = globp;
 			globp = "tag";
@@ -860,7 +860,7 @@ pfixup:
 		 *
 		 * BUG:		Was ^S but doesn't work in cbreak mode
 		 */
-		case CTRL(g):
+		case CTRL('g'):
 			oglobp = globp;
 			globp = "file";
 gogo:
@@ -874,7 +874,7 @@ gogo:
 		 * 	to shell.  Only works with Berkeley/IIASA process
 		 *	control in kernel.
 		 */
-		case CTRL(z):
+		case CTRL('z'):
 			forbid(dosusp == 0 || !ldisc);
 			vsave();
 			oglobp = globp;

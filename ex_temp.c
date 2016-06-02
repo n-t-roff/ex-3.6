@@ -1,5 +1,6 @@
 /* Copyright (c) 1980 Regents of the University of California */
 static char *sccsid = "@(#)ex_temp.c	6.2 10/23/80";
+#include <stdint.h>
 #include "ex.h"
 #include "ex_temp.h"
 #include "ex_vis.h"
@@ -89,7 +90,7 @@ cleanup(all)
 	}
 }
 
-getline(tl)
+ex_getline(tl)
 	line tl;
 {
 	register char *bp, *lp;
@@ -225,7 +226,7 @@ getblock(atl, iof)
 #ifdef	VMUNIX
 #define	INCORB	64
 char	incorb[INCORB+1][BUFSIZ];
-#define	pagrnd(a)	((char *)(((int)a)&~(BUFSIZ-1)))
+#define	pagrnd(a)	((char *)(((intptr_t)a)&~(BUFSIZ-1)))
 int	stilinc;	/* up to here not written yet */
 #endif
 
@@ -578,7 +579,7 @@ YANKreg(c)
 	}
 	CP(savelb,linebuf);
 	for (addr = addr1; addr <= addr2; addr++) {
-		getline(*addr);
+		ex_getline(*addr);
 		if (sp->rg_flags) {
 			if (addr == addr2)
 				*wcursor = 0;

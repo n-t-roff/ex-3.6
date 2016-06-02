@@ -25,12 +25,13 @@ LIBDIR=	/usr/lib
 FOLD=	${BINDIR}/fold
 CTAGS=	${BINDIR}/ctags
 XSTR=	${BINDIR}/xstr
-DEBUGFLAGS=	-DTRACE -g
-NONDEBUGFLAGS=	-O
-DEB=	${NONDEBUGFLAGS}	# or ${DEBUGFLAGS} to to debug
-CFLAGS=	-DTABS=8 -DCRYPT -DLISPCODE -DCHDIR -DUCVISUAL -DVFORK -DVMUNIX ${DEB}
-LDFLAGS=	-z		# or -i or -n
-TERMLIB=	-ltermcap
+DEBUGFLAGS=	-g
+NONDEBUGFLAGS=	
+DEB=	${DEBUGFLAGS}	# or ${DEBUGFLAGS} to to debug
+CFLAGS=	-DTABS=8 -DCRYPT -DLISPCODE -DCHDIR -DUCVISUAL -DVMUNIX -DUSG3TTY \
+	${DEB}
+LDFLAGS=
+TERMLIB=	-ltinfo
 MKSTR=	${BINDIR}/mkstr
 CXREF=	${BINDIR}/cxref
 INCLUDE=/usr/include
@@ -40,7 +41,7 @@ OBJS=	ex.o ex_addr.o ex_cmds.o ex_cmds2.o ex_cmdsub.o \
 	ex_set.o ex_subr.o ex_temp.o ex_tty.o ex_unix.o \
 	ex_v.o ex_vadj.o ex_vget.o ex_vmain.o ex_voper.o \
 	ex_vops.o ex_vops2.o ex_vops3.o ex_vput.o ex_vwind.o \
-	printf.o bcopy.o strings.o
+	printf.o
 HDRS=	ex.h ex_argv.h ex_re.h ex_temp.h ex_tty.h ex_tune.h ex_vars.h ex_vis.h
 SRC1=	ex.c ex_addr.c ex_cmds.c ex_cmds2.c ex_cmdsub.c
 SRC2=	ex_data.c ex_get.c ex_io.c ex_put.c ex_re.c
@@ -51,17 +52,6 @@ SRC6=	printf.c bcopy.c expreserve.c exrecover.c
 MISC=	makefile READ_ME :rofix
 VGRIND=	csh /usr/ucb/vgrind
 VHDR=	"Ex Version ${VERSION}"
-
-.c.o:
-# ifdef VMUNIX
-	${CC} -E ${CFLAGS} $*.c | ${XSTR} -c -
-# else
-#	${MKSTR} - ex${VERSION}strings x $*.c
-#	${CC} -E ${CFLAGS} x$*.c | ${XSTR} -c -
-#	rm -f x$*.c
-# endif
-	${CC} ${CFLAGS} -c x.c 
-	mv x.o $*.o
 
 a.out: ${OBJS}
 	${CC} ${LDFLAGS} ${OBJS} ${TERMLIB}
@@ -98,6 +88,9 @@ expreserve: expreserve.o
 
 expreserve.o:
 	${CC} ${CFLAGS} -c -O expreserve.c
+
+.c.o:
+	${CC} ${CFLAGS} -c $<
 
 clean:
 #	If we dont have ex we cant make it so dont rm ex_vars.h

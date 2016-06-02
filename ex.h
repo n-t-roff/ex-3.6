@@ -143,9 +143,9 @@ struct	option options[NOPTS + 1];
  */
 #define	QUOTE	0200
 #define	TRIM	0177
-#define	CTRL(c)	('c' & 037)
-#define	NL	CTRL(j)
-#define	CR	CTRL(m)
+#define	CTRL(c)	(c & 037)
+#define	NL	CTRL('j')
+#define	CR	CTRL('m')
 #define	DELETE	0177		/* See also ATTN, QUIT in ex_tune.h */
 #define	ESCAPE	033
 
@@ -158,7 +158,7 @@ int	chng;			/* Warn "No write" */
 char	*Command;
 short	defwind;		/* -w# change default window size */
 int	dirtcnt;		/* When >= MAXDIRT, should sync temporary */
-#ifdef TIOCLGET
+#ifdef SIGTSTP
 bool	dosusp;			/* Do SIGTSTP in visual when ^Z typed */
 #endif
 bool	edited;			/* Current file is [Edited] */
@@ -217,7 +217,7 @@ int	xchng;			/* Suppresses multiple "No writes" in !cmd */
 /*
  * Macros
  */
-#define	CP(a, b)	(ignore(strcpy(a, b)))
+#define	CP(a, b)	memmove(a, b, strlen(b) + 1)
 			/*
 			 * FIXUNDO: do we want to mung undo vars?
 			 * Usually yes unless in a macro or global.

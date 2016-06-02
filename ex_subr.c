@@ -161,7 +161,7 @@ genindent(indent)
 getDOT()
 {
 
-	getline(*dot);
+	ex_getline(*dot);
 }
 
 line *
@@ -385,10 +385,7 @@ merror1(seekpt)
 morelines()
 {
 
-	if ((int) sbrk(1024 * sizeof (line)) == -1)
-		return (-1);
-	endcore += 1024;
-	return (0);
+	return (-1);
 }
 
 nonzero()
@@ -815,6 +812,7 @@ markit(addr)
  * better than core dumping and losing your work, leaving your tty
  * in a weird state, etc.
  */
+#ifdef SIGEMT
 int _ovno;
 onemt()
 {
@@ -827,3 +825,4 @@ onemt()
 		_ovno = 0;
 	error("emt trap, _ovno is %d @ - try again");
 }
+#endif

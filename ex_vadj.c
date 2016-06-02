@@ -58,7 +58,7 @@ vopen(tp, p)
 		 * and so its not worth optimizing.
 		 */
 		vdirty(vcline+1, WECHO);
-	getline(*tp);
+	ex_getline(*tp);
 
 	/*
 	 * If we are opening at the top of the window, can try a window
@@ -620,7 +620,7 @@ vredraw(p)
 		if (l == vcline)
 			strcLIN(temp);
 		else
-			getline(*tp);
+			ex_getline(*tp);
 
 		/*
 		 * Delete junk between displayed lines.
@@ -664,7 +664,7 @@ vredraw(p)
 
 		vcline = l;
 		for (; tp <= dol && Peekkey != ATTN; tp++) {
-			getline(*tp);
+			ex_getline(*tp);
 			if (p + vdepth() - 1 > WBOT)
 				break;
 			vopen(tp, p);
@@ -816,7 +816,7 @@ vsync1(p)
 				if (l == vcline)
 					strcLIN(temp);
 				else
-					getline(dot[l - vcline]);
+					ex_getline(dot[l - vcline]);
 				/*
 				 * Be careful that a long line doesn't cause the
 				 * screen to shoot up.

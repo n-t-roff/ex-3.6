@@ -912,9 +912,9 @@ tostart()
 ttcharoff()
 {
 	nttyc.t_quitc = '\377';
-	if (nttyc.t_startc != CTRL(q))
+	if (nttyc.t_startc != CTRL('q'))
 		nttyc.t_startc = '\377';
-	if (nttyc.t_stopc != CTRL(s))
+	if (nttyc.t_stopc != CTRL('s'))
 		nttyc.t_stopc = '\377';
 # ifdef TIOCLGET
 	nlttyc.t_suspc = '\377';	/* ^Z */
@@ -935,9 +935,9 @@ ttcharoff()
 	 * their start/stop chars.  As long as they can't we can't get
 	 * into trouble so we just leave them alone.
 	 */
-	if (tty.c_cc[VSTART] != CTRL(q))
+	if (tty.c_cc[VSTART] != CTRL('q'))
 		tty.c_cc[VSTART] = '\377';
-	if (tty.c_cc[VSTOP] != CTRL(s))
+	if (tty.c_cc[VSTOP] != CTRL('s'))
 		tty.c_cc[VSTOP] = '\377';
 # endif
 }
@@ -1136,3 +1136,4 @@ onsusp()
 		vrepaint(cursor);
 	}
 }
+#endif

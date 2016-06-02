@@ -2,7 +2,7 @@
 static char *printf_id = "@(#) printf.c:2.2 6/5/79";
 /* The local sccs version within ex */
 static char *sccsid = "@(#)printf.c	6.1 10/18/80";
-#include "varargs.h"
+#include <stdarg.h>
 /*
  * This version of printf is compatible with the Version 7 C
  * printf. The differences are only minor except that this
@@ -21,11 +21,9 @@ static int width, sign, fill;
 
 char *_p_dconv();
 
-printf(va_alist)
-	va_dcl
+printf(const char *fmt, ...)
 {
 	va_list ap;
-	register char *fmt;
 	char fcode;
 	int prec;
 	int length,mask1,nbits,n;
@@ -34,8 +32,7 @@ printf(va_alist)
 	char *ptr;
 	char buf[134];
 
-	va_start(ap);
-	fmt = va_arg(ap,char *);
+	va_start(ap, fmt);
 	for (;;) {
 		/* process format string first */
 		while ((fcode = *fmt++)!='%') {

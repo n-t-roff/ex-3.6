@@ -144,8 +144,10 @@ main(ac, av)
 	ruptible = signal(SIGINT, SIG_IGN) == SIG_DFL;
 	if (signal(SIGTERM, SIG_IGN) == SIG_DFL)
 		signal(SIGTERM, onhup);
+#ifdef SIGEMT
 	if (signal(SIGEMT, SIG_IGN) == SIG_DFL)
 		signal(SIGEMT, onemt);
+#endif
 
 	/*
 	 * Initialize end of core pointers.
@@ -155,8 +157,8 @@ main(ac, av)
 	 * this as ed does, saving a little core, but it will probably
 	 * not often make much difference.
 	 */
-	fendcore = (line *) sbrk(0);
-	endcore = fendcore - 2;
+	fendcore = malloc(0x4000 * sizeof(line *));
+	endcore = fendcore + 0x4000 - 1;
 
 	/*
 	 * Process flag arguments.

@@ -206,7 +206,10 @@ bool fromvis;
 		CP(savelb, linebuf);
 		nlines = dol - zero;
 		while ((line *) endcore - truedol < nlines)
-			morelines();
+			if (morelines() < 0) {
+				error("Out of memory@- too many lines in file");
+				return;
+			}
 		copyw(truedol+1, zero+1, nlines);
 		truedol += nlines;
 

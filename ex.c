@@ -157,8 +157,8 @@ main(ac, av)
 	 * this as ed does, saving a little core, but it will probably
 	 * not often make much difference.
 	 */
-	fendcore = malloc(0x4000 * sizeof(line *));
-	endcore = fendcore + 0x4000 - 1;
+	fendcore = malloc(0x8000 * sizeof(line *));
+	endcore = fendcore + 0x8000 - 1;
 
 	/*
 	 * Process flag arguments.

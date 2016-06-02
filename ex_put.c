@@ -908,7 +908,7 @@ tostart()
  * We always turn off quit since datamedias send ^\ for their
  * right arrow key.
  */
-#ifdef TIOCGETC
+#if defined(TIOCGETC) && !defined(USG3TTY)
 ttcharoff()
 {
 	nttyc.t_quitc = '\377';

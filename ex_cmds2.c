@@ -6,8 +6,8 @@ static char *sccsid = "@(#)ex_cmds2.c	6.1 10/18/80";
 #include "ex_tty.h"
 #include "ex_vis.h"
 
-bool	pflag, nflag;
-int	poffset;
+extern bool	pflag, nflag;
+extern int	poffset;
 
 /*
  * Subroutines for major command loop.

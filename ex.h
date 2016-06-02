@@ -58,7 +58,7 @@
  *	probably blow the compilation if we goof up.
  */
 #ifdef USG3TTY
-#include <termio.h>
+#include <termios.h>
 #define CBREAK xxxxx
 #else
 #include <sgtty.h>

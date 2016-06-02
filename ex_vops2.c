@@ -9,8 +9,8 @@ static char *sccsid = "@(#)ex_vops2.c	6.2 10/23/80";
  * and mostly, insert mode (and a subroutine
  * to read an input line, including in the echo area.)
  */
-char	*vUA1, *vUA2;
-char	*vUD1, *vUD2;
+extern char	*vUA1, *vUA2;
+extern char	*vUD1, *vUD2;
 
 /*
  * Obleeperate characters in hardcopy

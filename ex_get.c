@@ -102,8 +102,10 @@ top:
 		input = in_line;
 		goto top;
 	}
-	if (read(0, (char *) &lastc, 1) != 1)
+	if (read(0, in_line, 1) != 1)
 		lastc = EOF;
+	else				/* mjm: lastc is a short! */
+		lastc = in_line[0];	/* mjm: in rightmost 8 bits ! */
 	return (lastc);
 }
 

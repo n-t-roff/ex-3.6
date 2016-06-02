@@ -125,8 +125,8 @@ short	destline;
  * to stty.  In USG V3 it's the whole tty structure.
  */
 #ifdef	USG3TTY			/* USG V3 */
-  struct	termio tty;	/* Use this one structure to change modes */
-  typedef	struct termio ttymode;	/* Mode to contain tty flags */
+  struct	termios tty;	/* Use this one structure to change modes */
+  typedef	struct termios ttymode;	/* Mode to contain tty flags */
 
 #else				/* All others */
   struct	sgttyb tty;	/* Always stty/gtty using this one structure */

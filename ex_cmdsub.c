@@ -1071,7 +1071,7 @@ mapcmd(un, ab)
 {
 	char lhs[100], rhs[100];	/* max sizes resp. */
 	register char *p;
-	register char c;
+	int c;
 	char *dname;
 	struct maps *mp;	/* the map structure we are working on */
 

@@ -9,6 +9,9 @@ static char *sccsid = "@(#)ex_cmds2.c	6.1 10/18/80";
 extern bool	pflag, nflag;
 extern int	poffset;
 
+static void error0(void);
+static void setflav(void);
+
 /*
  * Subroutines for major command loop.
  */
@@ -73,7 +76,7 @@ error(str, i)
 {
 
 	error0();
-	merror(str, i);
+	imerror(str, i);
 	if (writing) {
 		serror(" [Warning - %s is incomplete]", file);
 		writing = 0;
@@ -91,7 +94,7 @@ erewind()
 	argv = argv0;
 	args = args0;
 	if (argc > 1 && !hush) {
-		printf(mesg("%d files@to edit"), argc);
+		ex_printf(mesg("%d files@to edit"), argc);
 		if (inopen)
 			putchar(' ');
 		else
@@ -105,7 +108,8 @@ erewind()
  * just fixing up the echo area for the print.
  * Otherwise we reset a number of externals, and discard unused input.
  */
-error0()
+static void
+error0(void)
 {
 
 	if (laste) {
@@ -113,7 +117,7 @@ error0()
 		tlaste();
 #endif
 		laste = 0;
-		sync();
+		ex_sync();
 	}
 	if (vcatch) {
 		if (splitw == 0)
@@ -256,7 +260,8 @@ next()
  * Eat trailing flags and offsets after a command,
  * saving for possible later post-command prints.
  */
-newline()
+void
+ex_newline(void)
 {
 	register int c;
 
@@ -311,13 +316,14 @@ serror("Extra chars|Extra characters at end of \"%s\" command", Command);
  * Before quit or respec of arg list, check that there are
  * no more files in the arg list.
  */
-nomore()
+void
+nomore(void)
 {
 
 	if (argc == 0 || morargc == argc)
 		return;
 	morargc = argc;
-	merror("%d more file", argc);
+	imerror("%d more file", argc);
 	serror("%s@to edit", plural((long) argc));
 }
 
@@ -343,7 +349,8 @@ quickly()
 /*
  * Reset the flavor of the output to print mode with no numbering.
  */
-resetflav()
+void
+resetflav(void)
 {
 
 	if (inopen)
@@ -379,7 +386,8 @@ serror(str, cp)
  * and either use normally decoded (ARPAnet standard) characters or list mode,
  * where end of lines are marked and tabs print as ^I.
  */
-setflav()
+static void
+setflav(void)
 {
 
 	if (inopen)
@@ -469,8 +477,8 @@ ret:
 /*
  * Continue after a : command from open/visual.
  */
-vcontin(ask)
-	bool ask;
+void
+vcontin(bool ask)
 {
 
 	if (vcnt > 0)

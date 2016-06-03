@@ -16,8 +16,8 @@ int	poffset;
  * is to strip command addresses, do a little address oriented
  * processing and call command routines to do the real work.
  */
-commands(noprompt, exitoneof)
-	bool noprompt, exitoneof;
+void
+commands(bool noprompt, bool exitoneof)
 {
 	register line *addr;
 	register int c;
@@ -161,7 +161,7 @@ choice:
 			tail("append");
 			setdot();
 			aiflag = exclam();
-			newline();
+			ex_newline();
 			vmacchng(0);
 			deletenone();
 			setin(addr2);
@@ -267,7 +267,7 @@ doecmd:
 			init();
 			addr2 = zero;
 			laste++;
-			sync();
+			ex_sync();
 			rop(c);
 			nochng();
 			continue;
@@ -298,7 +298,7 @@ doecmd:
 			setdot();
 			nonzero();
 			aiflag = exclam();
-			newline();
+			ex_newline();
 			vmacchng(0);
 			deletenone();
 			setin(addr2);
@@ -316,7 +316,7 @@ doecmd:
 			c = exclam();
 			setcount();
 			nonzero();
-			newline();
+			ex_newline();
 			vmacchng(0);
 			if (given < 2 && addr2 != dol)
 				addr2++;
@@ -330,7 +330,7 @@ casek:
 			c = getchar();
 			if (endcmd(c))
 				serror("Mark what?|%s requires following letter", Command);
-			newline();
+			ex_newline();
 			if (!islower(c))
 				error("Bad mark|Mark must specify a letter");
 			setdot();
@@ -498,7 +498,7 @@ quit:
 					init();
 					addr2 = zero;
 					laste++;
-					sync();
+					ex_sync();
 					recover();
 					rop2();
 					revocer();
@@ -643,7 +643,7 @@ suspend:
 			setnoaddr();
 			markDOT();
 			c = exclam();
-			newline();
+			ex_newline();
 			undo(c);
 			continue;
 
@@ -654,9 +654,9 @@ suspend:
 /* version */
 				tail("version");
 				setNAEOL();
-				printf("@(#) Version 3.6, 11/3/80"
+				ex_printf("@(#) Version 3.6, 11/3/80"
 				    " (4.0BSD).  git "
-				    "160603 13:08"
+				    "160603 16:24"
 				    +5);
 				noonl();
 				continue;
@@ -739,7 +739,7 @@ wq:
 				c = tolower(c);
 			if (!islower(c))
 				error("Bad register");
-			newline();
+			ex_newline();
 			setdot();
 			cmdmac(c);
 			continue;
@@ -794,11 +794,11 @@ numberit:
 
 /* = */
 		case '=':
-			newline();
+			ex_newline();
 			setall();
 			if (inglobal == 2)
 				pofix();
-			printf("%d", lineno(addr2));
+			ex_printf("%d", lineno(addr2));
 			noonl();
 			continue;
 

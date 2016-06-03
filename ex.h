@@ -130,7 +130,6 @@ struct	option options[NOPTS + 1];
 # else
 #	define	BUFSIZ	512
 # endif
-#	define	NULL	0
 #	define	EOF	-1
 #endif
 
@@ -355,7 +354,7 @@ char	*vgetline();
 char	*vinit();
 char	*vpastwh();
 char	*vskipwh();
-int	put();
+void	put(void);
 int	putreg();
 int	YANKreg();
 int	delete();
@@ -366,7 +365,6 @@ int	gettty();
 int	join();
 int	listchar();
 off_t	lseek();
-int	normchar();
 int	normline();
 int	numbline();
 int	(*oldquit)();
@@ -376,13 +374,72 @@ int	onsusp();
 int	putch();
 int	shift();
 int	termchar();
-int	vfilter();
+void	vfilter(void);
 #ifdef CBREAK
 int	vintr();
 #endif
 int	vputch();
-int	vshftop();
+void	vshftop(void);
 int	yank();
+void	setall(void);
+void	setcount(void);
+void	commands(bool, bool);
+void	vcontin(bool);
+void	resetflav(void);
+void	nomore(void);
+void	ex_newline(void);
+void	mapcmd(int, int);
+void	zop2(int, int);
+void	tagfind(bool);
+void	squish(void);
+void	source(char *, bool);
+void	putfile(void);
+void	rop(int);
+void	filename(int);
+void	pstop(void);
+void	pstart(void);
+void	set(void);
+void	merror(char *);
+void	imerror(char *, int);
+void	smerror(char *, char *);
+void	reverse(line *, line *);
+void	netchange(int);
+void	killcnt(int);
+void	synctmp(void);
+void	blkio(short, char *, int (*)());
+void	fileinit(void);
+void	gettmode(void);
+void	vsetsiz(int);
+void	savevis(void);
+void	vop(void);
+void	vdirty(int, int);
+void	sethard(void);
+void	vreplace(int, int, int);
+void	vsync1(int);
+void	vredraw(int);
+void	vrepaint(char *);
+void	vscrap(void);
+void	vmoveitup(int, bool);
+void	macpush(char *, int);
+void	addtext(char *);
+void	setLAST(void);
+void	vsave(void);
+void	vmain(void);
+void	eend(int (*)());
+void	operate(int, int);
+void	vrep(int);
+void	vmacchng(bool);
+void	vUndo(void);
+void	vappend(int, int, int);
+void	takeout(char *);
+void	physdc(int, int);
+void	vgoto(int, int);
+void	vclrech(bool);
+void	vclreol(void);
+void	vshow(line *, line *);
+void	vdown(int, int, bool);
+void	vup(int, int, bool);
+void	ex_printf(const char *, ...);
 
 /*
  * C doesn't have a (void) cast, so we have to fake it for lint's sake.

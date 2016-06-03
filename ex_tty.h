@@ -174,3 +174,5 @@ int	maphopcnt;	/* check for infinite mapping loops */
 bool	anyabbrs;	/* true if abbr or unabbr has been done */
 char	ttynbuf[20];	/* result of ttyname() */
 int	ttymesg;	/* original mode of users tty */
+
+void addmac(char *,char *,char *,struct maps *);

@@ -20,6 +20,9 @@ static char *sccsid = "@(#)ex_put.c	6.3 11/3/80";
  * During open/visual, outchar and putchar will be set to
  * routines in the file ex_vput.c (vputchar, vinschar, etc.).
  */
+static void normchar(int);
+static void slobber(int);
+
 int	(*Outchar)() = termchar;
 int	(*Putchar)() = normchar;
 int	(*Pline)() = normline;
@@ -86,8 +89,8 @@ listchar(c)
  * Format c for printing.  Handle funnies of upper case terminals
  * and crocky hazeltines which don't have ~.
  */
-normchar(c)
-	register short c;
+static void
+normchar(int c)
 {
 	register char *colp;
 
@@ -136,7 +139,7 @@ numbline(i)
 
 	if (shudclob)
 		slobber(' ');
-	printf("%6d  ", i);
+	ex_printf("%6d  ", i);
 	normline();
 }
 
@@ -162,8 +165,8 @@ normline()
  * the printing of the line will erase or otherwise obliterate
  * the prompt which was printed before.  If it won't, do it now.
  */
-slobber(c)
-	int c;
+static void
+slobber(int c)
 {
 
 	shudclob = 0;
@@ -720,6 +723,7 @@ putnl()
 	putchar('\n');
 }
 
+#if 0
 putS(cp)
 	char *cp;
 {
@@ -729,7 +733,7 @@ putS(cp)
 	while (*cp)
 		putch(*cp++);
 }
-
+#endif
 
 putch(c)
 	int c;
@@ -774,7 +778,7 @@ lprintf(cp, dp)
 	register int (*P)();
 
 	P = setlist(1);
-	printf(cp, dp);
+	ex_printf(cp, dp);
 	Putchar = P;
 }
 
@@ -791,7 +795,8 @@ putNFL()
 /*
  * Try to start -nl mode.
  */
-pstart()
+void
+pstart(void)
 {
 
 	if (NONL)
@@ -817,7 +822,8 @@ pstart()
 /*
  * Stop -nl mode.
  */
-pstop()
+void
+pstop(void)
 {
 
 	if (inopen)

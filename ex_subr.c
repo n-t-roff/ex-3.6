@@ -9,6 +9,8 @@ static char *sccsid = "@(#)ex_subr.c	6.2 11/6/80";
  * Random routines, in alphabetical order.
  */
 
+static void save(line *, line *);
+
 any(c, s)
 	int c;
 	register char *s;
@@ -232,8 +234,8 @@ killed()
 	killcnt(addr2 - addr1 + 1);
 }
 
-killcnt(cnt)
-	register int cnt;
+void
+killcnt(int cnt)
 {
 
 	if (inopen) {
@@ -243,9 +245,9 @@ killcnt(cnt)
 	}
 	if (!notable(cnt))
 		return;
-	printf("%d lines", cnt);
+	ex_printf("%d lines", cnt);
 	if (value(TERSE) == 0) {
-		printf(" %c%s", Command[0] | ' ', Command + 1);
+		ex_printf(" %c%s", Command[0] | ' ', Command + 1);
 		if (Command[strlen(Command) - 1] != 'e')
 			putchar('e');
 		putchar('d');
@@ -332,18 +334,14 @@ mesg(str)
 	return (str);
 }
 
+void
+merror(char *s) {
+	imerror(s, 0);
+}
+
 /*VARARGS2*/
-merror(seekpt, i)
-#ifdef VMUNIX
-	char *seekpt;
-#else
-# ifdef lint
-	char *seekpt;
-# else
-	int seekpt;
-# endif
-#endif
-	int i;
+void
+imerror(char *seekpt, int i)
 {
 	register char *cp = linebuf;
 
@@ -356,7 +354,7 @@ merror(seekpt, i)
 		vclreol();
 	if (SO && SE)
 		putpad(SO);
-	printf(mesg(cp), i);
+	ex_printf(mesg(cp), i);
 	if (SO && SE)
 		putpad(SE);
 }
@@ -420,8 +418,8 @@ netchHAD(cnt)
 	netchange(lineDOL() - cnt);
 }
 
-netchange(i)
-	register int i;
+void
+netchange(int i)
 {
 	register char *cp;
 
@@ -436,7 +434,7 @@ netchange(i)
 	}
 	if (!notable(i))
 		return;
-	printf(mesg("%d %slines@in file after %s"), i, cp, Command);
+	ex_printf(mesg("%d %slines@in file after %s"), i, cp, Command);
 	putNFL();
 }
 
@@ -471,7 +469,6 @@ plural(i)
 	return (i == 1 ? "" : "s");
 }
 
-int	qcount();
 short	vcntcol;
 
 qcolumn(lim, gp)
@@ -495,9 +492,8 @@ qcolumn(lim, gp)
 	return (vcntcol);
 }
 
-int
-qcount(c)
-	int c;
+void
+qcount(int c)
 {
 
 	if (c == '\t') {
@@ -507,8 +503,8 @@ qcount(c)
 	vcntcol++;
 }
 
-reverse(a1, a2)
-	register line *a1, *a2;
+void
+reverse(line *a1, line *a2)
 {
 	register line t;
 
@@ -521,9 +517,8 @@ reverse(a1, a2)
 	}
 }
 
-save(a1, a2)
-	line *a1;
-	register line *a2;
+static void
+save(line *a1, line *a2)
 {
 	register int more;
 
@@ -573,7 +568,7 @@ span()
 	return (addr2 - addr1 + 1);
 }
 
-sync()
+ex_sync()
 {
 
 	chng = 0;
@@ -595,13 +590,8 @@ skipwh()
 }
 
 /*VARARGS2*/
-smerror(seekpt, cp)
-#ifdef lint
-	char *seekpt;
-#else
-	int seekpt;
-#endif
-	char *cp;
+void
+smerror(char *seekpt, char *cp)
 {
 
 	if (seekpt == 0)

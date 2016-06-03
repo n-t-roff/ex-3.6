@@ -17,6 +17,7 @@ line	*tad1;
 static	jnoop();
 
 static void splitit(void);
+static void somechange(void);
 
 /*
  * Append after line a lines returned by function f.
@@ -87,10 +88,10 @@ pargs()
 		if (ac != 0)
 			putchar(' ');
 		if (ac + argc == argc0 - 1)
-			printf("[");
+			ex_printf("[");
 		lprintf("%s", as);
 		if (ac + argc == argc0 - 1)
-			printf("]");
+			ex_printf("]");
 		as = av ? *++av : strend(as) + 1;
 	}
 	noonl();
@@ -174,7 +175,8 @@ deletenone()
  * Crush out the undo save area, moving the open/visual
  * save area down in its place.
  */
-squish()
+void
+squish(void)
 {
 	register line *a1 = dol + 1, *a2 = unddol + 1, *a3 = truedol + 1;
 
@@ -262,7 +264,7 @@ move()
 	adt = address(0);
 	if (adt == 0)
 		serror("%s where?|%s requires a trailing address", Command);
-	newline();
+	ex_newline();
 	move1(iscopy, adt);
 	killed();
 }
@@ -343,7 +345,8 @@ getput()
 	return (0);
 }
 
-put()
+void
+put(void)
 {
 	register int cnt;
 
@@ -460,8 +463,8 @@ shift(c, cnt)
  * Find a tag in the tags file.
  * Most work here is in parsing the tags file itself.
  */
-tagfind(quick)
-	bool quick;
+void
+tagfind(bool quick)
 {
 	char cmdbuf[BUFSIZ];
 	char filebuf[FNSIZE];
@@ -752,7 +755,7 @@ zop(hadpr)
 		lines = op == EOF ? value(SCROLL) : excl ? LINES - 1 : 2*value(SCROLL);
 	if (inopen || c != EOF) {
 		ungetchar(c);
-		newline();
+		ex_newline();
 	}
 	addr1 = addr2;
 	if (addr2 == 0 && dot < dol && op == 0)
@@ -761,9 +764,8 @@ zop(hadpr)
 	zop2(lines, op);
 }
 
-zop2(lines, op)
-	register int lines;
-	register int op;
+void
+zop2(int lines, int op)
 {
 	register line *split;
 
@@ -1028,7 +1030,8 @@ undo(c)
  * Be (almost completely) sure there really
  * was a change, before claiming to undo.
  */
-somechange()
+static void
+somechange(void)
 {
 	register line *ip, *jp;
 
@@ -1065,9 +1068,10 @@ somechange()
  * Map command:
  * map src dest
  */
-mapcmd(un, ab)
-	int un;	/* true if this is unmap command */
-	int ab;	/* true if this is abbr command */
+void
+mapcmd(int un, int ab)
+	/* int un;	/ * true if this is unmap command */
+	/* int ab;	/ * true if this is abbr command */
 {
 	char lhs[100], rhs[100];	/* max sizes resp. */
 	register char *p;
@@ -1109,7 +1113,7 @@ mapcmd(un, ab)
 		} else if (endcmd(c) && c!='"') {
 			ungetchar(c);
 			if (un) {
-				newline();
+				ex_newline();
 				*p = 0;
 				addmac(lhs, NOSTR, NOSTR, mp);
 				return;
@@ -1133,7 +1137,7 @@ mapcmd(un, ab)
 		*p++ = c;
 	}
 	*p = 0;
-	newline();
+	ex_newline();
 	/*
 	 * Special hack for function keys: #1 means key f1, etc.
 	 * If the terminal doesn't have function keys, we just use #1.
@@ -1161,9 +1165,8 @@ mapcmd(un, ab)
  * using NOSTR for dest.  Dname is what to show in listings.  mp is
  * the structure to affect (arrows, etc).
  */
-addmac(src,dest,dname,mp)
-	register char *src, *dest, *dname;
-	register struct maps *mp;
+void
+addmac(char *src,char *dest,char *dname,struct maps *mp)
 {
 	register int slot, zer;
 

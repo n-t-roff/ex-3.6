@@ -33,8 +33,8 @@ long	cntodd;			/* Count of non-ascii characters " */
  * If comm is E then command is doomed and we are
  * parsing just so user won't have to retype the name.
  */
-filename(comm)
-	int comm;
+void
+filename(int comm)
 {
 	register int c = comm, d;
 	register int i;
@@ -90,19 +90,19 @@ filename(comm)
 		lprintf("\"%s\"", file);
 		if (comm == 'f') {
 			if (value(READONLY))
-				printf(" [Read only]");
+				ex_printf(" [Read only]");
 			if (!edited)
-				printf(" [Not edited]");
+				ex_printf(" [Not edited]");
 			if (tchng)
-				printf(" [Modified]");
+				ex_printf(" [Modified]");
 		}
 		flush();
 	} else
-		printf("No file ");
+		ex_printf("No file ");
 	if (comm == 'f') {
 		if (!(i = lineDOL()))
 			i++;
-		printf(" line %d of %d --%ld%%--", lineDOT(), lineDOL(),
+		ex_printf(" line %d of %d --%ld%%--", lineDOT(), lineDOL(),
 		    (long) 100 * lineDOT() / i);
 	}
 }
@@ -183,8 +183,8 @@ filexp:
  * Glob the argument words in genbuf, or if no globbing
  * is implied, just split them up directly.
  */
-glob(gp)
-	struct glob *gp;
+void
+glob(struct glob *gp)
 {
 	int pvec[2];
 	register char **argv = gp->argv;
@@ -298,8 +298,8 @@ samef:
  * Read a file from the world.
  * C is command, 'e' if this really an edit (or a recover).
  */
-rop(c)
-	int c;
+void
+rop(int c)
 {
 	register int i;
 	struct stat stbuf;
@@ -317,7 +317,7 @@ rop(c)
 			 * this is ugly, and it screws up the + option.
 			 */
 			if (!seenprompt) {
-				printf(" [New file]");
+				ex_printf(" [New file]");
 				noonl();
 				return;
 			}
@@ -391,7 +391,7 @@ rop(c)
 		}
 	}
 	if (value(READONLY)) {
-		printf(" [Read only]");
+		ex_printf(" [Read only]");
 		flush();
 	}
 	if (c == 'r')
@@ -453,7 +453,7 @@ other:
 		tlaste();
 #endif
 		laste = 0;
-		sync();
+		ex_sync();
 	}
 }
 
@@ -559,9 +559,9 @@ cre:
 		writing = 1;
 		if (hush == 0)
 			if (nonexist)
-				printf(" [New file]");
+				ex_printf(" [New file]");
 			else if (value(WRITEANY) && edfile() != EDF)
-				printf(" [Existing file]");
+				ex_printf(" [Existing file]");
 		break;
 
 	case 2:
@@ -579,7 +579,7 @@ cre:
 	if (c != 2 && addr1 == one && addr2 == dol) {
 		if (eq(file, savedfile))
 			edited = 1;
-		sync();
+		ex_sync();
 	}
 	if (!dofname) {
 		addr1 = saddr1;
@@ -620,7 +620,7 @@ getfile()
 			if (ninbuf < 0) {
 				if (lp != linebuf) {
 					lp++;
-					printf(" [Incomplete last line]");
+					ex_printf(" [Incomplete last line]");
 					break;
 				}
 				return (EOF);
@@ -664,7 +664,8 @@ cntch);
 /*
  * Write a range onto the io stream.
  */
-putfile()
+void
+putfile(void)
 {
 	line *a1;
 	register char *fp, *lp;
@@ -731,9 +732,8 @@ wrerror()
 short slevel;
 short ttyindes;
 
-source(fil, okfail)
-	char *fil;
-	bool okfail;
+void
+source(char *fil, bool okfail)
 {
 	jmp_buf osetexit;
 	register int saveinp, ointty, oerrno;
@@ -810,19 +810,19 @@ iostats()
 	io = -1;
 	if (hush == 0) {
 		if (value(TERSE))
-			printf(" %d/%D", cntln, cntch);
+			ex_printf(" %d/%D", cntln, cntch);
 		else
-			printf(" %d line%s, %D character%s", cntln, plural((long) cntln),
+			ex_printf(" %d line%s, %D character%s", cntln, plural((long) cntln),
 			    cntch, plural(cntch));
 		if (cntnull || cntodd) {
-			printf(" (");
+			ex_printf(" (");
 			if (cntnull) {
-				printf("%D null", cntnull);
+				ex_printf("%D null", cntnull);
 				if (cntodd)
-					printf(", ");
+					ex_printf(", ");
 			}
 			if (cntodd)
-				printf("%D non-ASCII", cntodd);
+				ex_printf("%D non-ASCII", cntodd);
 			putchar(')');
 		}
 		noonl();

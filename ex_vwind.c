@@ -70,9 +70,8 @@ vupdown(cnt, curs)
  * If scroll, then we MUST use a scroll.
  * Otherwise clear and redraw if motion is far.
  */
-vup(cnt, ind, scroll)
-	register int cnt, ind;
-	bool scroll;
+void
+vup(int cnt, int ind, bool scroll)
 {
 	register int i, tot;
 
@@ -119,9 +118,8 @@ okr:
 /*
  * Like vup, but scrolling down.
  */
-vdown(cnt, ind, scroll)
-	register int cnt, ind;
-	bool scroll;
+void
+vdown(int cnt, int ind, bool scroll)
 {
 	register int i, tot;
 
@@ -229,8 +227,8 @@ vclean()
  * (and call us recursively).  Eventually, we clear the screen
  * (or its open mode equivalent) and redraw.
  */
-vshow(addr, top)
-	line *addr, *top;
+void
+vshow(line *addr, line *top)
 {
 #ifndef CBREAK
 	register bool fried = 0;

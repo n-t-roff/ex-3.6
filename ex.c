@@ -190,7 +190,7 @@ main(ac, av)
 			}
 			trace = fopen(tracef, "w");
 			if (trace == NULL)
-				printf("Trace create error\n");
+				ex_printf("Trace create error\n");
 			setbuf(trace, tracbuf);
 			break;
 

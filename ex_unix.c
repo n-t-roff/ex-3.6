@@ -90,7 +90,7 @@ uexp:
 	if (warn && hush == 0 && chng && xchng != chng && value(WARN) && dol > zero) {
 		xchng = chng;
 		vnfl();
-		printf(mesg("[No write]|[No write since last change]"));
+		ex_printf(mesg("[No write]|[No write since last change]"));
 		noonl();
 		flush();
 	} else
@@ -184,7 +184,7 @@ unixex(opt, up, newstdin, mode)
 		if (ruptible)
 			signal(SIGINT, SIG_DFL);
 		execl(svalue(SHELL), "sh", opt, up, (char *) 0);
-		printf("No %s!\n", svalue(SHELL));
+		ex_printf("No %s!\n", svalue(SHELL));
 		error(NOSTR);
 	}
 	if (mode & 1) {
@@ -215,7 +215,7 @@ unixwt(c, f)
 		setty(f);
 	setrupt();
 	if (!inopen && c && hush == 0) {
-		printf("!\n");
+		ex_printf("!\n");
 		flush();
 		termreset();
 		gettmode();

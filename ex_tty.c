@@ -10,7 +10,8 @@ static char *sccsid = "@(#)ex_tty.c	6.2 10/30/80";
  */
 short	ospeed = -1;
 
-gettmode()
+void
+gettmode(void)
 {
 
 #ifndef USG3TTY

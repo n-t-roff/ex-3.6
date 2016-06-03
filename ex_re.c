@@ -8,6 +8,9 @@ static char *sccsid = "@(#)ex_re.c	6.2 10/23/80";
  * Very similar to ed, with some re extensions and
  * confirmed substitute.
  */
+static void gdelete(void);
+static void snote(int, int);
+
 global(k)
 	bool k;
 {
@@ -71,7 +74,7 @@ global(k)
 brkwh:
 	ungetchar(c);
 out:
-	newline();
+	ex_newline();
 	*gp++ = c;
 	*gp++ = 0;
 	saveall();
@@ -135,7 +138,8 @@ out:
  * and g/r.e./.,/r.e.2/d are not treated specially.  There is no
  * good reason for this except the question: where to you draw the line?
  */
-gdelete()
+static void
+gdelete(void)
 {
 	register line *a1, *a2, *a3;
 
@@ -260,7 +264,7 @@ compsub(ch)
 		default:
 			ungetchar(c);
 			setcount();
-			newline();
+			ex_newline();
 			if (uselastre)
 				savere(subre);
 			else
@@ -508,15 +512,15 @@ place(sp, l1, l2)
 	return (sp);
 }
 
-snote(total, lines)
-	register int total, lines;
+static void
+snote(int total, int lines)
 {
 
 	if (!notable(total))
 		return;
-	printf(mesg("%d subs|%d substitutions"), total);
+	ex_printf(mesg("%d subs|%d substitutions"), total);
 	if (lines != 1 && lines != total)
-		printf(" on %d lines", lines);
+		ex_printf(" on %d lines", lines);
 	noonl();
 	flush();
 }

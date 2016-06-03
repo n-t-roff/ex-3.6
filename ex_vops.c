@@ -29,7 +29,8 @@ static char *sccsid = "@(#)ex_vops.c	6.3 10/23/80";
 char	*vUA1, *vUA2;
 char	*vUD1, *vUD2;
 
-vUndo()
+void
+vUndo(void)
 {
 
 	/*
@@ -168,8 +169,8 @@ bool show;	/* if true update the screen */
  * opposed to an ex command).  This has nothing to do with being
  * in open/visual mode as :s/foo/bar is not fromvis.
  */
-vmacchng(fromvis)
-bool fromvis;
+void
+vmacchng(bool fromvis)
 {
 	line *savedot, *savedol;
 	char *savecursor;
@@ -278,7 +279,8 @@ vnoapp()
 /*
  * Move is simple, except for moving onto new lines in hardcopy open mode.
  */
-vmove()
+void
+vmove(void)
 {
 	register int cnt;
 
@@ -346,8 +348,8 @@ vmove()
  * by vchange (although vchange may pass it back if it degenerates
  * to a full line range delete.)
  */
-vdelete(c)
-	char c;
+void
+vdelete(int c)
 {
 	register char *cp;
 	register int i;
@@ -406,8 +408,8 @@ vdelete(c)
  * Across lines with both wcursor and wdot given, we delete
  * and sync then append (but one operation for undo).
  */
-vchange(c)
-	char c;
+void
+vchange(int c)
 {
 	register char *cp;
 	register int i, ind, cnt;
@@ -689,7 +691,8 @@ voOpen(c, cnt)
  */
 char	vshnam[2] = { 'x', 0 };
 
-vshftop()
+void
+vshftop(void)
 {
 	register line *addr;
 	register int cnt;
@@ -712,7 +715,8 @@ vshftop()
  *
  * Filter portions of the buffer through unix commands.
  */
-vfilter()
+void
+vfilter(void)
 {
 	register line *addr;
 	register int cnt;
@@ -850,8 +854,8 @@ vshift()
  * Replace a single character with the next input character.
  * A funny kind of insert.
  */
-vrep(cnt)
-	register int cnt;
+void
+vrep(int cnt)
 {
 	register int i, c;
 
@@ -888,7 +892,8 @@ vrep(cnt)
  * Yanking to string registers occurs for free (essentially)
  * in the routine xdw().
  */
-vyankit()
+void
+vyankit(void)
 {
 	register int cnt;
 

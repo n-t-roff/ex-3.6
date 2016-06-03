@@ -19,7 +19,10 @@ int	havetmp;
 short	tfile = -1;
 short	rfile = -1;
 
-fileinit()
+static void rbflush(void);
+
+void
+fileinit(void)
 {
 	register char *p;
 	register int i, j;
@@ -227,10 +230,8 @@ char	incorb[INCORB+1][BUFSIZ];
 int	stilinc;	/* up to here not written yet */
 #endif
 
-blkio(b, buf, iofcn)
-	short b;
-	char *buf;
-	int (*iofcn)();
+void
+blkio(short b, char *buf, int (*iofcn)())
 {
 
 #ifdef VMUNIX
@@ -276,7 +277,8 @@ tflush()
  * Synchronize the state of the temporary file in case
  * a crash occurs.
  */
-synctmp()
+void
+synctmp(void)
 {
 	register int cnt;
 	register line *a;
@@ -414,7 +416,7 @@ REGblk()
 				j++, m >>= 1;
 			rused[i] |= (1 << j);
 #ifdef RDEBUG
-			printf("allocating block %d\n", i * 16 + j);
+			ex_printf("allocating block %d\n", i * 16 + j);
 #endif
 			return (i * 16 + j);
 		}
@@ -448,7 +450,7 @@ KILLreg(c)
 	sp->rg_flags = sp->rg_nleft = 0;
 	while (rblock != 0) {
 #ifdef RDEBUG
-		printf("freeing block %d\n", rblock);
+		ex_printf("freeing block %d\n", rblock);
 #endif
 		rused[rblock / 16] &= ~(1 << (rblock % 16));
 		regio(rblock, shread);
@@ -625,7 +627,8 @@ YANKline()
 		*rbufcp = 0;
 }
 
-rbflush()
+static void
+rbflush(void)
 {
 	register struct strreg *sp = strp;
 

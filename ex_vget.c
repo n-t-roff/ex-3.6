@@ -11,6 +11,8 @@ static char *sccsid = "@(#)ex_vget.c	6.2 10/23/80";
  * which appears in the echo area.
  */
 
+static void addto(char *, char *);
+
 /*
  * Return the key.
  */
@@ -276,7 +278,8 @@ blewit:
  * the purposes of repeat, so copy it from
  * the working to the previous command buffer.
  */
-setLAST()
+void
+setLAST(void)
 {
 
 	if (vglobp || vmacp)
@@ -293,8 +296,8 @@ setLAST()
  * If the insertion buffer oveflows, then destroy
  * the repeatability of the insert.
  */
-addtext(cp)
-	char *cp;
+void
+addtext(char *cp)
 {
 
 	if (vglobp)
@@ -326,8 +329,8 @@ setBUF(BUF)
 	*wp = c;
 }
 
-addto(buf, str)
-	register char *buf, *str;
+static void
+addto(char *buf, char *str)
 {
 
 	if ((buf[0] & (QUOTE|TRIM)) == OVERBUF)
@@ -356,11 +359,11 @@ noteit(must)
 	if (WBOT == WECHO)
 		vmoveitup(1, 1);
 	vigoto(WECHO, 0);
-	printf("%d %sline", notecnt, notesgn);
+	ex_printf("%d %sline", notecnt, notesgn);
 	if (notecnt > 1)
 		putchar('s');
 	if (*notenam) {
-		printf(" %s", notenam);
+		ex_printf(" %s", notenam);
 		if (*(strend(notenam) - 1) != 'e')
 			putchar('e');
 		putchar('d');
@@ -503,9 +506,8 @@ map(c,maps)
  * is false for, for example, pushing back lookahead from fastpeekkey(),
  * since otherwise two fast escapes can clobber our undo.
  */
-macpush(st, canundo)
-char *st;
-int canundo;
+void
+macpush(char *st, int canundo)
 {
 	char tmpbuf[BUFSIZ];
 

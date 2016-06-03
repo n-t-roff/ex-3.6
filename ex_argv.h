@@ -25,3 +25,5 @@ struct	glob {
 	char	*argv[NARGS + 1];	/* WHAT A WASTE! */
 	char	argspac[NCARGS + sizeof (int)];
 } frob;
+
+void	glob(struct glob *);

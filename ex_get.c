@@ -128,7 +128,7 @@ gettty()
 	if (intty && !inglobal) {
 		if (offset) {
 			holdcm = 1;
-			printf("  %4d  ", lineDOT() + 1);
+			ex_printf("  %4d  ", lineDOT() + 1);
 			flush();
 			holdcm = 0;
 		}

@@ -14,7 +14,10 @@ static char *sccsid = "@(#)ex_vmain.c	6.2 10/23/80";
 
 #define	forbid(a)	{ if (a) goto fonfon; }
 
-vmain()
+static void vzop(bool, int, int);
+
+void
+vmain(void)
 {
 	register int c, cnt, i;
 	char esave[TUBECOLS];
@@ -956,7 +959,7 @@ doinit:
 			 */
 			if (dot == zero) {
 				fixzero();
-				sync();
+				ex_sync();
 			}
 			splitw = 0;
 
@@ -1164,7 +1167,8 @@ vremote(cnt, f, arg)
 /*
  * Save the current contents of linebuf, if it has changed.
  */
-vsave()
+void
+vsave(void)
 {
 	char temp[LBSIZE];
 
@@ -1205,10 +1209,8 @@ vsave()
  * Do a z operation.
  * Code here is rather long, and very uninteresting.
  */
-vzop(hadcnt, cnt, c)
-	bool hadcnt;
-	int cnt;
-	register int c;
+static void
+vzop(bool hadcnt, int cnt, int c)
 {
 	register line *addr;
 

@@ -292,16 +292,16 @@ setwind()
 		break;
 
 	case CRTOPEN:
-		basWTOP = LINES - 2;
+		basWTOP = EX_LINES - 2;
 		/* fall into */
 
 	case VISUAL:
-		ZERO = LINES - TUBESIZE / WCOLS;
+		ZERO = EX_LINES - TUBESIZE / WCOLS;
 		if (ZERO < 0)
 			ZERO = 0;
 		if (ZERO > basWTOP)
 			error("Screen too large for internal buffer");
-		WTOP = basWTOP; WBOT = LINES - 2; WECHO = LINES - 1;
+		WTOP = basWTOP; WBOT = EX_LINES - 2; WECHO = EX_LINES - 1;
 		break;
 	}
 	state = bastate;
@@ -374,9 +374,9 @@ vsetsiz(int size)
 
 	if (bastate != VISUAL)
 		return;
-	b = LINES - 1 - size;
-	if (b >= LINES - 1)
-		b = LINES - 2;
+	b = EX_LINES - 1 - size;
+	if (b >= EX_LINES - 1)
+		b = EX_LINES - 2;
 	if (b < 0)
 		b = 0;
 	basWTOP = b;

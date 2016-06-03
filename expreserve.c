@@ -126,6 +126,10 @@ main(argc)
 	exit(0);
 }
 
+#ifndef _PATH_PRESERVE
+# define _PATH_PRESERVE "/var/preserve"
+#endif
+
 char	pattern[] =	_PATH_PRESERVE "/Exaa`XXXXX";
 
 /*

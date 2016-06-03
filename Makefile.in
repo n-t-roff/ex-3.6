@@ -28,10 +28,10 @@ DEBUGFLAGS=	-g -O0 -fno-omit-frame-pointer -fno-optimize-sibling-calls \
 	-fsanitize=undefined \
 	-fsanitize=integer
 NONDEBUGFLAGS=	
-DEB=	${DEBUGFLAGS}	# or ${DEBUGFLAGS} to to debug
+DEB=	${NONDEBUGFLAGS}	# or ${DEBUGFLAGS} to to debug
 CFLAGS=	-DTABS=8 -DCRYPT -DLISPCODE -DCHDIR -DUCVISUAL -DVMUNIX -DUSG3TTY \
 	-DLIBDIR='"${LIBDIR}"' ${DEB}
-LDFLAGS=
+LDFLAGS=-s
 OBJS=	ex.o ex_addr.o ex_cmds.o ex_cmds2.o ex_cmdsub.o \
 	ex_data.o ex_get.o ex_io.o ex_put.o ex_re.o \
 	ex_set.o ex_subr.o ex_temp.o ex_tty.o ex_unix.o \

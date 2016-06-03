@@ -95,8 +95,8 @@ printone:
 			if (value(TABSTOP) <= 0)
 				value(TABSTOP) = TABS;
 			if (op == &options[WINDOW]) {
-				if (value(WINDOW) >= LINES)
-					value(WINDOW) = LINES-1;
+				if (value(WINDOW) >= EX_LINES)
+					value(WINDOW) = EX_LINES-1;
 				vsetsiz(value(WINDOW));
 			}
 			break;

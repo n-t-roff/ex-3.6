@@ -6,7 +6,6 @@ static char *sccsid = "@(#)exrecover.c	6.1 10/18/80";
 
 #undef	BUFSIZ
 #undef	EOF
-#undef	NULL
 
 #include <stdio.h>
 #include <sys/dir.h>
@@ -35,6 +34,10 @@ static char *sccsid = "@(#)exrecover.c	6.1 10/18/80";
  */
 #ifndef lint
 #define	ignorl(a)	a
+#endif
+
+#ifndef _PATH_PRESERVE
+# define _PATH_PRESERVE "/var/preserve"
 #endif
 
 /*
@@ -167,8 +170,8 @@ main(argc, argv)
  * a newline which would screw up the screen.
  */
 /*VARARGS2*/
-error(str)
-	char *str;
+void
+error(char *str)
 {
 
 	fputs(str, stderr);

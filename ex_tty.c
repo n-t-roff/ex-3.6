@@ -8,7 +8,7 @@ static char *sccsid = "@(#)ex_tty.c	6.2 10/30/80";
  * and calculation of flags at entry or after
  * a shell escape which may change them.
  */
-short	ospeed = -1;
+/* short	ospeed = -1; */
 
 void
 gettmode(void)
@@ -30,8 +30,12 @@ gettmode(void)
 	ex_ospeed = cfgetospeed(&tty);
 	value(SLOWOPEN) = ex_ospeed < B1200;
 	normf = tty;
+#ifdef IUCLC
 	UPPERCASE = (tty.c_iflag & IUCLC) != 0;
+#endif
+# ifdef TAB3
 	GT = (tty.c_oflag & TABDLY) != TAB3 && !XT;
+# endif
 	NONL = (tty.c_oflag & OCRNL) == 0;
 #endif
 }
@@ -67,18 +71,18 @@ setterm(type)
 		CP(ltcbuf, "xx|dumb:");
 	}
 	gettmode();
-	i = LINES = tgetnum("li");
-	if (LINES <= 5)
-		LINES = 24;
-	if (LINES > TUBELINES)
-		LINES = TUBELINES;
-	l = LINES;
+	i = EX_LINES = tgetnum("li");
+	if (EX_LINES <= 5)
+		EX_LINES = 24;
+	if (EX_LINES > TUBELINES)
+		EX_LINES = TUBELINES;
+	l = EX_LINES;
 	if (ex_ospeed < B1200)
 		l = 9;	/* including the message line at the bottom */
 	else if (ex_ospeed < B2400)
 		l = 17;
-	if (l > LINES)
-		l = LINES;
+	if (l > EX_LINES)
+		l = EX_LINES;
 	aoftspace = tspace;
 	zap();
 	/*
@@ -129,7 +133,7 @@ setterm(type)
 	aoftspace = tspace;
 	CP(ttytype, longname(ltcbuf, type));
 	if (i <= 0)
-		LINES = 2;
+		EX_LINES = 2;
 	/* proper strings to change tty type */
 	termreset();
 	value(REDRAW) = AL && DL;
@@ -209,7 +213,7 @@ char *str;
 	if (str == NULL)
 		return 10000;	/* infinity */
 	costnum = 0;
-	tputs(str, LINES, countnum);
+	tputs(str, EX_LINES, countnum);
 	return costnum;
 }
 

@@ -491,7 +491,7 @@ putreg(c)
 			vgoto(WECHO, 0);
 		}
 		vreg = -1;
-		error("Nothing in register %c", c);
+		ierror("Nothing in register %c", c);
 	}
 	if (inopen && partreg(c)) {
 		if (!FIXUNDO) {
@@ -656,7 +656,7 @@ int buflen;
 	rnext = mapreg(c)->rg_first;
 	if (rnext==0) {
 		*buf = 0;
-		error("Nothing in register %c",c);
+		ierror("Nothing in register %c",c);
 	}
 	p = buf;
 	while (getREG()==0) {

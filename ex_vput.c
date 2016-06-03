@@ -24,7 +24,7 @@ vclear()
 	if (trace)
 		tfixnl(), fprintf(trace, "------\nvclear\n");
 #endif
-	tputs(CL, LINES, putch);
+	tputs(CL, EX_LINES, putch);
 	destcol = 0;
 	outcol = 0;
 	destline = 0;

@@ -432,7 +432,7 @@ casek:
 			pflag = 0;
 print:
 			nonzero();
-			if (CL && span() > LINES) {
+			if (CL && span() > EX_LINES) {
 				flush1();
 				vclear();
 			}
@@ -656,7 +656,7 @@ suspend:
 				setNAEOL();
 				ex_printf("@(#) Version 3.6, 11/3/80"
 				    " (4.0BSD).  git "
-				    "160603 19:05"
+				    "160603 23:37"
 				    +5);
 				noonl();
 				continue;
@@ -869,6 +869,6 @@ numberit:
 			ungetchar(c);
 			tailprim("", 0, 0);
 		}
-		error("What?|Unknown command character '%c'", c);
+		ierror("What?|Unknown command character '%c'", c);
 	}
 }

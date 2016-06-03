@@ -445,7 +445,7 @@ other:
 			undkind = UNDNONE;
 		if (inopen) {
 			vcline = 0;
-			vreplace(0, LINES, lineDOL());
+			vreplace(0, EX_LINES, lineDOL());
 		}
 	}
 	if (laste) {

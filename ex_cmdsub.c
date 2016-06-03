@@ -459,6 +459,17 @@ shift(c, cnt)
 	killed();
 }
 
+#ifdef VMUNIX
+	/*
+	 * We have lots of room so we bring in stdio and do
+	 * a binary search on the tags file.
+	 */
+# undef EOF
+# include <stdio.h>
+# undef getchar
+# undef putchar
+#endif
+
 /*
  * Find a tag in the tags file.
  * Most work here is in parsing the tags file itself.
@@ -475,14 +486,6 @@ tagfind(bool quick)
 	int omagic;
 	char *fn, *fne;
 #ifdef VMUNIX
-	/*
-	 * We have lots of room so we bring in stdio and do
-	 * a binary search on the tags file.
-	 */
-# undef EOF
-# include <stdio.h>
-# undef getchar
-# undef putchar
 	FILE *iof;
 	char iofbuf[BUFSIZ];
 	long mid;	/* assumed byte offset */
@@ -746,13 +749,13 @@ zop(hadpr)
 			lines *= 10;
 			lines += c - '0';
 		}
-		if (lines < LINES)
+		if (lines < EX_LINES)
 			znoclear++;
 		value(WINDOW) = lines;
 		if (op == '=')
 			lines += 2;
 	} else
-		lines = op == EOF ? value(SCROLL) : excl ? LINES - 1 : 2*value(SCROLL);
+		lines = op == EOF ? value(SCROLL) : excl ? EX_LINES - 1 : 2*value(SCROLL);
 	if (inopen || c != EOF) {
 		ungetchar(c);
 		ex_newline();

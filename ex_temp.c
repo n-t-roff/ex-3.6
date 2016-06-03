@@ -136,9 +136,6 @@ putline()
 	return (tl);
 }
 
-int	read();
-int	write();
-
 char *
 getblock(atl, iof)
 	line atl;

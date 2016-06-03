@@ -32,7 +32,6 @@ DEB=	${DEBUGFLAGS}	# or ${DEBUGFLAGS} to to debug
 CFLAGS=	-DTABS=8 -DCRYPT -DLISPCODE -DCHDIR -DUCVISUAL -DVMUNIX -DUSG3TTY \
 	${DEB}
 LDFLAGS=
-TERMLIB=	-ltinfo
 MKSTR=	${BINDIR}/mkstr
 CXREF=	${BINDIR}/cxref
 INCLUDE=/usr/include
@@ -97,6 +96,9 @@ clean:
 #	If we dont have ex we cant make it so dont rm ex_vars.h
 	-rm -f a.out exrecover expreserve strings core errs trace
 	-rm -f *.o x*.[cs]
+
+distclean: clean
+	rm -rf Makefile config.log
 
 install: ${BINDIR}
 	install a.out ${BINDIR}/ex

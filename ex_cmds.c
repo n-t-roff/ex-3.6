@@ -656,7 +656,7 @@ suspend:
 				setNAEOL();
 				printf("@(#) Version 3.6, 11/3/80"
 				    " (4.0BSD).  git "
-				    "160602 22:30"
+				    "160603 13:08"
 				    +5);
 				noonl();
 				continue;

@@ -41,6 +41,7 @@
  * of additional terminal descriptions you add to the termcap data base.
  */
 
+#include <unistd.h>
 #include <sys/types.h>
 #include <ctype.h>
 #include <errno.h>
@@ -358,7 +359,6 @@ int	put();
 int	putreg();
 int	YANKreg();
 int	delete();
-int	execl();
 int	filter();
 int	getfile();
 int	getsub();

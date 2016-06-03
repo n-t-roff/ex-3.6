@@ -928,7 +928,17 @@ ttcharoff()
 #ifdef USG3TTY
 ttcharoff()
 {
-	tty.c_cc[VQUIT] = '\377';
+	long vdisable;
+
+	if ((vdisable = fpathconf(STDIN_FILENO, _PC_VDISABLE)) == -1)
+		vdisable = '\377';
+	tty.c_cc[VQUIT] = vdisable;
+#ifdef VSUSP
+	tty.c_cc[VSUSP] = vdisable;
+#endif
+#ifdef VDSUSP
+	tty.c_cc[VDSUSP] = vdisable;
+#endif
 # ifdef VSTART
 	/*
 	 * The following is sample code if USG ever lets people change
@@ -936,9 +946,9 @@ ttcharoff()
 	 * into trouble so we just leave them alone.
 	 */
 	if (tty.c_cc[VSTART] != CTRL('q'))
-		tty.c_cc[VSTART] = '\377';
+		tty.c_cc[VSTART] = vdisable;
 	if (tty.c_cc[VSTOP] != CTRL('s'))
-		tty.c_cc[VSTOP] = '\377';
+		tty.c_cc[VSTOP] = vdisable;
 # endif
 }
 #endif

@@ -4,9 +4,9 @@ static char *sccsid = "@(#)expreserve.c	6.1 10/18/80";
 #include <ctype.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <sys/dir.h>
+#include <dirent.h>
 #include <pwd.h>
-#include "local/uparm.h"
+#include <paths.h>
 
 #ifdef VMUNIX
 #define	HBLKS	2
@@ -40,7 +40,7 @@ static char *sccsid = "@(#)expreserve.c	6.1 10/18/80";
 
 struct 	header {
 	time_t	Time;			/* Time temp file last updated */
-	short	Uid;			/* This users identity */
+	uid_t	Uid;			/* This users identity */
 #ifndef VMUNIX
 	short	Flines;			/* Number of lines in file */
 #else
@@ -64,11 +64,13 @@ FILE	*popen();
 
 #define eq(a, b) strcmp(a, b) == 0
 
+static void notify(int, char *, int);
+
 main(argc)
 	int argc;
 {
-	register FILE *tf;
-	struct direct dirent;
+	DIR *tf;
+	struct dirent *dirent;
 	struct stat stbuf;
 
 	/*
@@ -97,35 +99,34 @@ main(argc)
 		exit(1);
 	}
 
-	tf = fopen(".", "r");
+	tf = opendir(".");
 	if (tf == NULL) {
 		perror("/tmp");
 		exit(1);
 	}
-	while (fread((char *) &dirent, sizeof dirent, 1, tf) == 1) {
-		if (dirent.d_ino == 0)
-			continue;
+	while ((dirent = readdir(tf))) {
 		/*
 		 * Ex temporaries must begin with Ex;
 		 * we check that the 10th character of the name is null
 		 * so we won't have to worry about non-null terminated names
 		 * later on.
 		 */
-		if (dirent.d_name[0] != 'E' || dirent.d_name[1] != 'x' || dirent.d_name[10])
+		if (dirent->d_name[0] != 'E' || dirent->d_name[1] != 'x' || dirent->d_name[10])
 			continue;
-		if (stat(dirent.d_name, &stbuf))
+		if (stat(dirent->d_name, &stbuf))
 			continue;
 		if ((stbuf.st_mode & S_IFMT) != S_IFREG)
 			continue;
 		/*
 		 * Save the bastard.
 		 */
-		ignore(copyout(dirent.d_name));
+		ignore(copyout(dirent->d_name));
 	}
+	closedir(tf);
 	exit(0);
 }
 
-char	pattern[] =	usrpath(preserve/Exaa`XXXXX);
+char	pattern[] =	_PATH_PRESERVE "/Exaa`XXXXX";
 
 /*
  * Copy file name into usrpath(preserve)/...
@@ -245,7 +246,7 @@ format:
 		if (i == 0) {
 			if (name)
 				ignore(unlink(name));
-			notify(H.Uid, H.Savedfile, (int) name);
+			notify(H.Uid, H.Savedfile, name ? 1 : 0);
 			return (0);
 		}
 		if (write(1, buf, i) != i) {
@@ -302,9 +303,8 @@ whoops:
 /*
  * Notify user uid that his file fname has been saved.
  */
-notify(uid, fname, flag)
-	int uid;
-	char *fname;
+static void
+notify(int uid, char *fname, int flag)
 {
 	struct passwd *pp = getpwuid(uid);
 	register FILE *mf;

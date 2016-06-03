@@ -134,7 +134,7 @@ TermTest () {
 	gen_mk 1
 	cat <<EOT >>$OUTMK
 $TMPNAM: ${TMPNAM}.o
-	\$(CC) \$(_LDFLAGS) -o \$@ ${TMPNAM}.o \$(TERMLIB)
+	\$(CC) \$(DEB) -o \$@ ${TMPNAM}.o \$(TERMLIB)
 EOT
 	cat <<EOT >>$TMPC
 #include <term.h>

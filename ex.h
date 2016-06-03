@@ -101,7 +101,7 @@ struct	option {
 #define	value(a)	options[a].ovalue
 #define	svalue(a)	options[a].osvalue
 
-struct	option options[NOPTS + 1];
+extern struct	option options[NOPTS + 1];
 
 
 /*
@@ -143,7 +143,9 @@ struct	option options[NOPTS + 1];
  */
 #define	QUOTE	0200
 #define	TRIM	0177
-#define	CTRL(c)	(c & 037)
+#ifndef CTRL
+# define	CTRL(c)	(c & 037)
+#endif
 #define	NL	CTRL('j')
 #define	CR	CTRL('m')
 #define	DELETE	0177		/* See also ATTN, QUIT in ex_tune.h */
@@ -163,7 +165,7 @@ bool	dosusp;			/* Do SIGTSTP in visual when ^Z typed */
 #endif
 bool	edited;			/* Current file is [Edited] */
 line	*endcore;		/* Last available core location */
-bool	endline;		/* Last cmd mode command ended with \n */
+extern bool	endline;		/* Last cmd mode command ended with \n */
 #ifndef VMUNIX
 short	erfile;			/* Error message file unit */
 #endif
@@ -180,7 +182,7 @@ bool	inopen;			/* Inside open or visual */
 char	*input;			/* Current position in cmd line input buffer */
 bool	intty;			/* Input is a tty */
 short	io;			/* General i/o unit (auto-closed on error!) */
-short	lastc;			/* Last character ret'd from cmd input */
+extern short	lastc;			/* Last character ret'd from cmd input */
 bool	laste;			/* Last command was an "e" (or "rec") */
 char	lastmac;		/* Last macro called for ** */
 char	lasttag[TAGSIZE];	/* Last argument to a tag command */
@@ -208,7 +210,7 @@ bool	seenprompt;		/* 1 if have gotten user input */
 bool	shudclob;		/* Have a prompt to clobber (e.g. on ^D) */
 int	status;			/* Status returned from wait() */
 int	tchng;			/* If nonzero, then [Modified] */
-short	tfile;			/* Temporary file unit */
+extern short	tfile;			/* Temporary file unit */
 bool	vcatch;			/* Want to catch an error (open/visual) */
 jmp_buf	vreslab;		/* For error throws to a visual catch */
 bool	writing;		/* 1 if in middle of a file write */
@@ -245,9 +247,9 @@ int	xchng;			/* Suppresses multiple "No writes" in !cmd */
  * Environment like memory
  */
 char	altfile[FNSIZE];	/* Alternate file name */
-char	direct[ONMSZ];		/* Temp file goes here */
-char	shell[ONMSZ];		/* Copied to be settable */
-char	ttytype[ONMSZ];		/* A long and pretty name */
+/* char	direct[ONMSZ];		/ * Temp file goes here */
+extern char	shell[ONMSZ];		/* Copied to be settable */
+extern char	ttytype[ONMSZ];		/* A long and pretty name */
 char	uxb[UXBSIZE + 2];	/* Last !command for !! */
 
 /*
@@ -321,9 +323,9 @@ char	*getpass();
 #define	NOSTR	(char *) 0
 #define	NOLINE	(line *) 0
 
-int	(*Outchar)();
-int	(*Pline)();
-int	(*Putchar)();
+extern int	(*Outchar)();
+extern int	(*Pline)();
+extern int	(*Putchar)();
 int	(*oldhup)();
 int	(*setlist())();
 int	(*setnorm())();

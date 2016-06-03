@@ -1196,7 +1196,9 @@ addmac(char *src,char *dest,char *dname,struct maps *mp)
 	}
 	else if (dest) {
 		/* check for tail recursion in input mode: fussier */
-		if (eq(src, dest+strlen(dest)-strlen(src)))
+		size_t ld = strlen(dest);
+		size_t ls = strlen(src);
+		if (ld >= ls && eq(src, dest + ld - ls))
 			error("No tail recursion");
 	}
 	/*

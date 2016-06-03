@@ -26,7 +26,10 @@ LIBDIR=	/usr/lib
 FOLD=	${BINDIR}/fold
 CTAGS=	${BINDIR}/ctags
 XSTR=	${BINDIR}/xstr
-DEBUGFLAGS=	-g
+DEBUGFLAGS=	-g -O0 -fno-omit-frame-pointer -fno-optimize-sibling-calls \
+	-fsanitize=address \
+	-fsanitize=undefined \
+	-fsanitize=integer
 NONDEBUGFLAGS=	
 DEB=	${DEBUGFLAGS}	# or ${DEBUGFLAGS} to to debug
 CFLAGS=	-DTABS=8 -DCRYPT -DLISPCODE -DCHDIR -DUCVISUAL -DVMUNIX -DUSG3TTY \
@@ -54,7 +57,7 @@ VGRIND=	csh /usr/ucb/vgrind
 VHDR=	"Ex Version ${VERSION}"
 
 a.out: ${OBJS}
-	${CC} ${LDFLAGS} ${OBJS} ${TERMLIB}
+	${CC} ${DEB} ${LDFLAGS} ${OBJS} ${TERMLIB}
 
 all:	a.out exrecover expreserve tags
 

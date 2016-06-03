@@ -715,10 +715,12 @@ vfindcol(i)
 	int i;
 {
 	register char *cp;
+	char *s;
 	register int (*OO)() = Outchar;
 
 	Outchar = qcount;
-	ignore(qcolumn(linebuf - 1, NOSTR));
+	s = linebuf;
+	ignore(qcolumn(s - 1, NOSTR));
 	for (cp = linebuf; *cp && vcntcol < i; cp++)
 		putchar(*cp);
 	if (cp != linebuf)

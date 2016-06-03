@@ -98,8 +98,8 @@ bool	XX;			/* Tektronix 4025 insert line */
  */
 bool	NONL;			/* Terminal can't hack linefeeds doing a CR */
 bool	UPPERCASE;		/* Ick! */
-short	LINES;			/* Number of lines on screen */
-short	COLUMNS;
+extern short	LINES;			/* Number of lines on screen */
+extern short	COLUMNS;
 short	OCOLUMNS;		/* Save COLUMNS for a hack in open mode */
 
 short	outcol;			/* Where the cursor is */

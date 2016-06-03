@@ -25,6 +25,12 @@ $ make distclean
 ## Usage notes
 * PAGE-UP, PAGE-DOWN keys may work on most terminals by putting
   `map  ^[[5~ ^B` and `map  ^[[6~ ^F` into `~/.exrc`.
+* When scrolling down less than a full screen height
+  some lines may be displayed wrong aligned.
+  `^L` fixes this.
+  Scrolling down with `^F` does't have this problem.
+* The size of files to edit is currently limited to
+  16384 lines.
 
 **Attention**:
 The original `vi` had not been 8-bit clean!

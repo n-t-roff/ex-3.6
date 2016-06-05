@@ -1,5 +1,8 @@
 /* Copyright (c) 1980 Regents of the University of California */
 static char *sccsid = "@(#)expreserve.c	6.1 10/18/80";
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
 #include <stdio.h>
 #include <ctype.h>
 #include <sys/types.h>
@@ -7,6 +10,7 @@ static char *sccsid = "@(#)expreserve.c	6.1 10/18/80";
 #include <dirent.h>
 #include <pwd.h>
 #include <paths.h>
+#include <fcntl.h>
 
 #ifdef VMUNIX
 #define	HBLKS	2
@@ -66,12 +70,14 @@ FILE	*popen();
 
 static void notify(int, char *, int);
 
-main(argc)
-	int argc;
+int
+main(int argc, char **argv)
 {
 	DIR *tf;
 	struct dirent *dirent;
 	struct stat stbuf;
+
+	(void)argv;
 
 	/*
 	 * If only one argument, then preserve the standard input.
@@ -123,7 +129,7 @@ main(argc)
 		ignore(copyout(dirent->d_name));
 	}
 	closedir(tf);
-	exit(0);
+	return 0;
 }
 
 #ifndef _PATH_PRESERVE

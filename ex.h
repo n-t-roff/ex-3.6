@@ -41,6 +41,7 @@
  * of additional terminal descriptions you add to the termcap data base.
  */
 
+#include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <ctype.h>
@@ -48,6 +49,7 @@
 #include <signal.h>
 #include <setjmp.h>
 #include <sys/stat.h>
+#include <fcntl.h>
 
 /*
  *	The following little dance copes with the new USG tty handling.

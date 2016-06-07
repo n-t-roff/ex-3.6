@@ -392,6 +392,9 @@ vmoveitup(int cnt, bool doclr)
 	if (doclr && (SO || SE))
 		vclrech(0);
 	if (SF) {
+		destline = WECHO;
+		destcol = (NONL ? 0 : outcol % WCOLS);
+		fgoto();
 		while (cnt > 0)
 			vputp(SF, 0), cnt--;
 		return;

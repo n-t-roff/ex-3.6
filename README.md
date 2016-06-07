@@ -2,6 +2,14 @@
 This is `vi` version 3.6 taken from 4.0BSD.
 It had been released in 1980.
 ## Installation notes
+The software is downloaded with
+```sh
+git clone https://github.com/n-t-roff/ex-3.6.git
+```
+and can be kept up-to-date with
+```sh
+git pull
+```
 Some configuration (e.g. installation paths) can be done in the
 [`makefile`](https://github.com/n-t-roff/ex-3.6/blob/master/Makefile.in).
 For compiling it on BSD and Linux autoconfiguration is required:
@@ -25,11 +33,6 @@ $ make distclean
 ## Usage notes
 * PAGE-UP, PAGE-DOWN keys may work on most terminals by putting
   `map  ^[[5~ ^B` and `map  ^[[6~ ^F` into `~/.exrc`.
-* When scrolling down less than a full screen height
-  or using `^E`
-  some lines may be displayed wrong aligned.
-  `^L` fixes this.
-  Scrolling down with `^F` does't have this problem.
 
 **Attention**:
 The original `vi` had not been 8-bit clean!

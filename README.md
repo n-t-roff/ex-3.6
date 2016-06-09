@@ -1,6 +1,6 @@
 # ex-3.6 (from 4.0BSD release)
 This is `vi` version 3.6 taken from 4.0BSD.
-It had been released in 1980.
+It had been released in November 1980.
 ## Installation notes
 The software is downloaded with
 ```sh
@@ -36,5 +36,6 @@ $ make distclean
 
 **Attention**:
 The original `vi` had not been 8-bit clean!
-Moreover it does automatically change all 8-bit characters to 7-bit in the whole file even if no editing is done!
+Moreover it does automatically change all 8-bit characters to 7-bit
+in the whole file even if no editing is done!
 This will e.g. destroy all UTF-8 characters.

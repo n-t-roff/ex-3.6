@@ -27,16 +27,18 @@ LIBDIR=	${PREFIX}/libexec
 #
 D_SBRK=	-DUNIX_SBRK
 MALLOC_O=mapmalloc.o
+#
 CTAGS=	${BINDIR}/ctags
 DEBUGFLAGS=	-g -O0 -fno-omit-frame-pointer -fno-optimize-sibling-calls \
+	-Wall -Wextra \
 	-fsanitize=undefined \
 	-fsanitize=integer
 #	-fsanitize=address
 NONDEBUGFLAGS=	
 DEB=	${NONDEBUGFLAGS}	# or ${DEBUGFLAGS} to to debug
-CFLAGS=	-DTABS=8 -DCRYPT -DLISPCODE -DCHDIR -DUCVISUAL -DVMUNIX -DUSG3TTY \
+_CFLAGS=	-DTABS=8 -DLISPCODE -DCHDIR -DUCVISUAL -DVMUNIX -DUSG3TTY \
 	${D_SBRK} -DLIBDIR='"${LIBDIR}"' ${DEB}
-LDFLAGS=-s
+_LDFLAGS=-s
 OBJS=	ex.o ex_addr.o ex_cmds.o ex_cmds2.o ex_cmdsub.o \
 	ex_data.o ex_get.o ex_io.o ex_put.o ex_re.o \
 	ex_set.o ex_subr.o ex_temp.o ex_tty.o ex_unix.o \
@@ -62,19 +64,19 @@ tags:	/tmp
 ${OBJS}: ex_vars.h
 
 # ex_vars.h:
-# 	csh makeoptions ${CFLAGS}
+# 	csh makeoptions ${_CFLAGS}
 
 a.out: ${OBJS}
-	${CC} ${DEB} ${LDFLAGS} ${OBJS} ${TERMLIB}
+	${CC} ${DEB} ${LDFLAGS} ${_LDFLAGS} ${OBJS} ${TERMLIB}
 
 exrecover: exrecover.o
-	${CC} ${DEB} ${LDFLAGS} exrecover.o -o exrecover
+	${CC} ${DEB} ${LDFLAGS} ${_LDFLAGS} exrecover.o -o exrecover
 
 expreserve: expreserve.o
-	${CC} ${DEB} ${LDFLAGS} expreserve.o -o expreserve
+	${CC} ${DEB} ${LDFLAGS} ${_LDFLAGS} expreserve.o -o expreserve
 
 .c.o:
-	${CC} ${CFLAGS} -c $<
+	${CC} ${CFLAGS} ${_CFLAGS} -c $<
 
 clean:
 #	If we dont have ex we cant make it so dont rm ex_vars.h
@@ -105,9 +107,9 @@ ${BINDIR} ${LIBDIR}:
 	mkdir -p $@
 
 lint:
-	lint ${CFLAGS} ex.c ex_?*.c
-	lint ${CFLAGS} -u exrecover.c
-	lint ${CFLAGS} expreserve.c
+	lint ${_CFLAGS} ex.c ex_?*.c
+	lint ${_CFLAGS} -u exrecover.c
+	lint ${_CFLAGS} expreserve.c
 
 vgrind:
 	tee index < /dev/null

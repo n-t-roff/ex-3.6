@@ -33,6 +33,11 @@ $ make distclean
 ## Usage notes
 * PAGE-UP, PAGE-DOWN keys may work on most terminals by putting
   `map  ^[[5~ ^B` and `map  ^[[6~ ^F` into `~/.exrc`.
+* The documents
+  [viin.pdf](http://n-t-roff.github.io/ex/3.6/viin.pdf)
+  and
+  [exrm.pdf](http://n-t-roff.github.io/ex/3.6/exrm.pdf)
+  describe vi version 3.6 in detail.
 
 **Attention**:
 The original `vi` had not been 8-bit clean!

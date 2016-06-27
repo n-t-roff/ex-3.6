@@ -22,6 +22,7 @@ VERSION=3.6
 PREFIX=	${DESTDIR}/usr/local
 BINDIR=	${PREFIX}/bin
 LIBDIR=	${PREFIX}/libexec
+SHAREDIR=${PREFIX}/share/ex/${VERSION}
 #
 # Either none or both of the next two lines needs to be uncommented
 #
@@ -84,9 +85,9 @@ clean:
 	-rm -f *.o x*.[cs]
 
 distclean: clean
-	rm -rf Makefile config.log
+	rm -f Makefile config.log
 
-install: ${BINDIR} ${LIBDIR}
+install: ${BINDIR} ${LIBDIR} ${SHAREDIR}
 	install a.out ${BINDIR}/ex
 	for i in vi view edit; do \
 		ln -sf ${BINDIR}/ex ${BINDIR}/$$i; \
@@ -94,6 +95,8 @@ install: ${BINDIR} ${LIBDIR}
 	for i in recover preserve; do \
 		install ex$$i ${LIBDIR}/ex${VERSION}$$i; \
 	done
+	cp doc/*.pdf ${SHAREDIR}/
+	chmod 644 ${SHAREDIR}/*.pdf
 
 uninstall:
 	for i in ex vi view edit; do \
@@ -102,8 +105,9 @@ uninstall:
 	for i in recover preserve; do \
 		rm -f ${LIBDIR}/ex${VERSION}$$i; \
 	done
+	rm -rf ${SHAREDIR}
 
-${BINDIR} ${LIBDIR}:
+${BINDIR} ${LIBDIR} ${SHAREDIR}:
 	mkdir -p $@
 
 lint:

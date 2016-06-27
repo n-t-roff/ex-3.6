@@ -226,7 +226,7 @@ glob(struct glob *gp)
 		dup(pvec[1]);
 		close(pvec[0]);
 		close(2);	/* so errors don't mess up the screen */
-		open("/dev/null", 1);
+		open("/dev/null", O_WRONLY);
 		execl(svalue(SHELL), "sh", "-c", genbuf, 0);
 		oerrno = errno; close(1); dup(2); errno = oerrno;
 		filioerr(svalue(SHELL));
@@ -307,7 +307,7 @@ rop(int c)
 	static int ovro;	/* old value(READONLY) */
 	static int denied;	/* 1 if READONLY was set due to file permissions */
 
-	io = open(file, 0);
+	io = open(file, O_RDONLY);
 	if (io < 0) {
 		if (c == 'e' && errno == ENOENT) {
 			edited++;
@@ -347,7 +347,7 @@ rop(int c)
 			break;
 #endif
 		i = read(io, (char *) &magic, sizeof(magic));
-		lseek(io, 0l, 0);
+		lseek(io, 0l, SEEK_SET);
 		if (i != sizeof(magic))
 			break;
 		switch (magic) {
@@ -527,7 +527,7 @@ bool dofname;	/* if 1 call filename, else use savedfile */
 				if (samei(&stbuf, "/dev/tty"))
 					break;
 			}
-			io = open(file, 1);
+			io = open(file, O_WRONLY);
 			if (io < 0)
 				syserror();
 			if (!isatty(io))
@@ -565,13 +565,13 @@ cre:
 		break;
 
 	case 2:
-		io = open(file, 1);
+		io = open(file, O_WRONLY);
 		if (io < 0) {
 			if (exclam || value(WRITEANY))
 				goto cre;
 			syserror();
 		}
-		lseek(io, 0l, 2);
+		lseek(io, 0l, SEEK_END);
 		break;
 	}
 	putfile();
@@ -749,7 +749,7 @@ source(char *fil, bool okfail)
 	if (slevel <= 0)
 		ttyindes = saveinp;
 	close(0);
-	if (open(fil, 0) < 0) {
+	if (open(fil, O_RDONLY) < 0) {
 		oerrno = errno;
 		setrupt();
 		dup(saveinp);

@@ -374,7 +374,7 @@ merror1(seekpt)
 #ifdef VMUNIX
 	strcpy(linebuf, seekpt);
 #else
-	lseek(erfile, (long) seekpt, 0);
+	lseek(erfile, (long) seekpt, SEEK_SET);
 	if (read(erfile, linebuf, 128) < 2)
 		CP(linebuf, "ERROR");
 #endif

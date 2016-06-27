@@ -53,7 +53,7 @@ static char *sccsid = "@(#)ex_v.c	6.1 10/18/80";
 oop()
 {
 	register char *ic;
-	char atube[TUBESIZE + LBSIZE];
+	static char atube[TUBESIZE + LBSIZE];
 	register ttymode f;
 
 	ovbeg();
@@ -154,7 +154,7 @@ void
 vop(void)
 {
 	register int c;
-	char atube[TUBESIZE + LBSIZE];
+	static char atube[TUBESIZE + LBSIZE];
 	register ttymode f;
 
 	if (!CA && UP == NOSTR) {

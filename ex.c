@@ -127,9 +127,9 @@ main(ac, av)
 	 */
 	draino();
 #ifndef VMUNIX
-	erfile = open(erpath+4, 0);
+	erfile = open(erpath+4, O_RDONLY);
 	if (erfile < 0) {
-		erfile = open(erpath, 0);
+		erfile = open(erpath, O_RDONLY);
 	}
 #endif
 	pstop();

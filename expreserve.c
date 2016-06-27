@@ -62,10 +62,6 @@ struct 	header {
 #define	ignorl(a)	a
 #endif
 
-struct	passwd *getpwuid();
-off_t	lseek();
-FILE	*popen();
-
 #define eq(a, b) strcmp(a, b) == 0
 
 static void notify(int, char *, int);
@@ -172,14 +168,14 @@ copyout(name)
 		 * Need read/write access for arcane reasons
 		 * (see below).
 		 */
-		if (open(name, 2) < 0)
+		if (open(name, O_RDWR) < 0)
 			return (-1);
 	}
 
 	/*
 	 * Get the header block.
 	 */
-	ignorl(lseek(0, 0l, 0));
+	ignorl(lseek(0, 0l, SEEK_SET));
 	if (read(0, (char *) &H, sizeof H) != sizeof H) {
 format:
 		if (name == 0)
@@ -208,7 +204,7 @@ format:
 #endif
 		goto format;
 	}
-	if (lseek(0, 0l, 0)) {
+	if (lseek(0, 0l, SEEK_SET)) {
 #ifdef DEBUG
 		fprintf(stderr, "Negative number of lines\n");
 #endif
@@ -223,7 +219,7 @@ format:
 		strcpy(H.Savedfile, "LOST");
 		ignore(write(0, (char *) &H, sizeof H));
 		H.Savedfile[0] = 0;
-		lseek(0, 0l, 0);
+		lseek(0, 0l, SEEK_SET);
 	}
 
 	/*

@@ -22,6 +22,7 @@ VERSION=3.6
 PREFIX=	${DESTDIR}/usr/local
 BINDIR=	${PREFIX}/bin
 LIBDIR=	${PREFIX}/libexec
+MANDIR=	${PREFIX}/share/man
 SHAREDIR=${PREFIX}/share/ex/${VERSION}
 #
 # Either none or both of the next two lines needs to be uncommented
@@ -87,11 +88,16 @@ clean:
 distclean: clean
 	rm -f Makefile config.log
 
-install: ${BINDIR} ${LIBDIR} ${SHAREDIR}
+install: ${BINDIR} ${LIBDIR} ${MANDIR}/man1 ${SHAREDIR}
 	install a.out ${BINDIR}/ex
 	for i in vi view edit; do \
 		ln -sf ${BINDIR}/ex ${BINDIR}/$$i; \
 	done
+	for i in ex vi; do \
+		install -m 644 $$i.1 ${MANDIR}/man1/; \
+	done
+	ln -sf ${MANDIR}/man1/ex.1 ${MANDIR}/man1/edit.1
+	ln -sf ${MANDIR}/man1/vi.1 ${MANDIR}/man1/view.1
 	for i in recover preserve; do \
 		install ex$$i ${LIBDIR}/ex${VERSION}$$i; \
 	done
@@ -101,13 +107,14 @@ install: ${BINDIR} ${LIBDIR} ${SHAREDIR}
 uninstall:
 	for i in ex vi view edit; do \
 		rm -f ${BINDIR}/$$i; \
+		rm -f ${MANDIR}/man1/$$i.1; \
 	done
 	for i in recover preserve; do \
 		rm -f ${LIBDIR}/ex${VERSION}$$i; \
 	done
 	rm -rf ${SHAREDIR}
 
-${BINDIR} ${LIBDIR} ${SHAREDIR}:
+${BINDIR} ${LIBDIR} ${MANDIR}/man1 ${SHAREDIR}:
 	mkdir -p $@
 
 lint:

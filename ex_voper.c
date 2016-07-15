@@ -771,6 +771,7 @@ word(op, cnt)
 			while (!margin() && wordof(which, wcursor))
 				wcursor--;
 		}
+		which = wordch(wcursor);
 		if (wcursor < linebuf || !wordof(which, wcursor))
 			wcursor++;
 	}

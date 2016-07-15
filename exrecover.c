@@ -4,9 +4,6 @@ static char *sccsid = "@(#)exrecover.c	6.1 10/18/80";
 #include "ex_temp.h"
 #include "ex_tty.h"
 
-#undef	BUFSIZ
-#undef	EOF
-
 #include <stdio.h>
 #include <sys/dir.h>
 #include <paths.h>

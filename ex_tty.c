@@ -123,7 +123,7 @@ setterm(type)
 	COLUMNS = tgetnum("co");
 	if (COLUMNS <= 4)
 		COLUMNS = 1000;
-	if (tgoto(CM, 2, 2)[0] == 'O')	/* OOPS */
+	if (!CM || tgoto(CM, 2, 2)[0] == 'O')	/* OOPS */
 		CA = 0, CM = 0;
 	else
 		CA = 1, costCM = cost(tgoto(CM, 8, 10));

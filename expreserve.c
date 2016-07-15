@@ -40,7 +40,7 @@ static char *sccsid = "@(#)expreserve.c	6.1 10/18/80";
 #else
 #define	LBLKS	900
 #endif
-#define	FNSIZE	128
+#define	FNSIZE	4096
 
 struct 	header {
 	time_t	Time;			/* Time temp file last updated */

@@ -101,8 +101,7 @@ install: ${BINDIR} ${LIBDIR} ${MANDIR}/man1 ${SHAREDIR}
 	for i in recover preserve; do \
 		install ex$$i ${LIBDIR}/ex${VERSION}$$i; \
 	done
-	cp doc/*.pdf ${SHAREDIR}/
-	chmod 644 ${SHAREDIR}/*.pdf
+	install -m 644 doc/*.pdf ${SHAREDIR}/
 
 uninstall:
 	for i in ex vi view edit; do \

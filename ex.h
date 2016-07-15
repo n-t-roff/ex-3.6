@@ -41,6 +41,7 @@
  * of additional terminal descriptions you add to the termcap data base.
  */
 
+#include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -119,20 +120,12 @@ extern struct	option options[NOPTS + 1];
  * are not debugging.  Such a modified printf exists in "printf.c" here.
  */
 #ifdef TRACE
-#	include <stdio.h>
 	FILE	*trace;
 	bool	trubble;
 	bool	techoin;
 	char	tracbuf[BUFSIZ];
 #	undef	putchar
 #	undef	getchar
-#else
-# ifdef	VMUNIX
-#	define	BUFSIZ	1024
-# else
-#	define	BUFSIZ	512
-# endif
-#	define	EOF	-1
 #endif
 
 /*
@@ -229,7 +222,7 @@ int	xchng;			/* Suppresses multiple "No writes" in !cmd */
 #define FIXUNDO		(inopen >= 0 && (inopen || !inglobal))
 #define ckaw()		{if (chng && value(AUTOWRITE)) wop(0);}
 #define	copy(a,b,c)	Copy((char *) a, (char *) b, c)
-#define	eq(a, b)	((a) && (b) && strcmp(a, b) == 0)
+#define	eq(a, b)	((void *)(a) != NULL && (void *)(b) != NULL && strcmp(a, b) == 0)
 #define	getexit(a)	copy(a, resetlab, sizeof (jmp_buf))
 #define	lastchar()	lastc
 #define	outchar(c)	(*Outchar)(c)

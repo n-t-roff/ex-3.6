@@ -31,9 +31,9 @@
  * Most other definitions are quite generous.
  */
 /* FNSIZE is also defined in expreserve.c */
-#define	FNSIZE		128		/* File name size */
+#define	FNSIZE		4096		/* File name size */
 #ifdef VMUNIX
-#define	LBSIZE		1024
+#define	LBSIZE		BUFSIZ
 #define	ESIZE		512
 #define CRSIZE		1024
 #else
@@ -47,7 +47,7 @@
 #define	ONMSZ		256		/* Option name size */
 #define	GBSIZE		256		/* Buffer size */
 #define	UXBSIZE		128		/* Unix command buffer size */
-#define	VBSIZE		128		/* Partial line max size in visual */
+#define	VBSIZE		LBSIZE		/* Partial line max size in visual */
 /* LBLKS is also defined in expreserve.c */
 #ifndef VMUNIX
 #define	LBLKS		125		/* Line pointer blocks in temp file */

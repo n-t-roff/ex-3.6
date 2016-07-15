@@ -459,17 +459,6 @@ shift(c, cnt)
 	killed();
 }
 
-#ifdef VMUNIX
-	/*
-	 * We have lots of room so we bring in stdio and do
-	 * a binary search on the tags file.
-	 */
-# undef EOF
-# include <stdio.h>
-# undef getchar
-# undef putchar
-#endif
-
 /*
  * Find a tag in the tags file.
  * Most work here is in parsing the tags file itself.
@@ -479,7 +468,7 @@ tagfind(bool quick)
 {
 	char cmdbuf[BUFSIZ];
 	char filebuf[FNSIZE];
-	char tagfbuf[128];
+	char tagfbuf[ONMSZ];
 	register int c, d;
 	bool samef = 1;
 	int tfcount = 0;
@@ -519,7 +508,8 @@ badtag:
 	 * Loop once for each file in tags "path".
 	 */
 	CP(tagfbuf, svalue(TAGS));
-	fne = tagfbuf - 1;
+	fne = tagfbuf;
+	fne--;
 	while (fne) {
 		fn = ++fne;
 		while (*fne && *fne != ' ')
@@ -534,6 +524,7 @@ badtag:
 			continue;
 		tfcount++;
 		setbuf(iof, iofbuf);
+		fgets(linebuf, sizeof linebuf, iof); fprintf(stderr,"CK '%s' \n",linebuf);
 		fstat(fileno(iof), &sbuf);
 		top = sbuf.st_size;
 		if (top == 0L || iof == NULL)
@@ -557,7 +548,7 @@ badtag:
 
 #ifdef VMUNIX
 			mid = (top + bot) / 2;
-			fseek(iof, mid, 0);
+			fseek(iof, mid, SEEK_SET);
 			if (mid > 0)	/* to get first tag in file to work */
 				/* scan to next \n */
 				if(fgets(linebuf, sizeof linebuf, iof)==NULL)

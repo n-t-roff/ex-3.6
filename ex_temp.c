@@ -13,13 +13,35 @@ static char *sccsid = "@(#)ex_temp.c	6.2 10/23/80";
 #define	READ	0
 #define	WRITE	1
 
+struct	strreg {
+	short	rg_flags;
+	short	rg_nleft;
+	short	rg_first;
+	short	rg_last;
+} strregs[('z'-'a'+1) + ('9'-'0'+1)], *strp;
+
+struct	rbuf {
+	short	rb_prev;
+	short	rb_next;
+	char	rb_text[BUFSIZ - 2 * sizeof (short)];
+} *rbuf;
+
+static void rbflush(void);
+
+#ifdef VMUNIX
+short	rused[256];
+#else
+short	rused[32];
+#endif
+short	rnleft;
+short	rblock;
+short	rnext;
+char	*rbufcp;
 char	tfname[40];
 char	rfname[40];
 int	havetmp;
 short	tfile = -1;
 short	rfile = -1;
-
-static void rbflush(void);
 
 void
 fileinit(void)
@@ -249,7 +271,7 @@ blkio(short b, char *buf, int (*iofcn)())
 	} else if (stilinc)
 		tflush();
 #endif
-	lseek(tfile, (long) (unsigned) b * BUFSIZ, SEEK_SET);
+	lseek(tfile, b * BUFSIZ, SEEK_SET);
 	if ((*iofcn)(tfile, buf, BUFSIZ) != BUFSIZ)
 		filioerr(tfname);
 }
@@ -311,7 +333,7 @@ synctmp(void)
 			oblock = *bp + 1;
 			bp[1] = -1;
 		}
-		lseek(tfile, (long) (unsigned) *bp * BUFSIZ, SEEK_SET);
+		lseek(tfile, *bp * BUFSIZ, SEEK_SET);
 		cnt = ((dol - a) + 2) * sizeof (line);
 		if (cnt > BUFSIZ)
 			cnt = BUFSIZ;
@@ -357,28 +379,6 @@ TSYNC()
  * BUG:		The default savind of deleted lines in numbered
  *		buffers may be rather inefficient; it hasn't been profiled.
  */
-struct	strreg {
-	short	rg_flags;
-	short	rg_nleft;
-	short	rg_first;
-	short	rg_last;
-} strregs[('z'-'a'+1) + ('9'-'0'+1)], *strp;
-
-struct	rbuf {
-	short	rb_prev;
-	short	rb_next;
-	char	rb_text[BUFSIZ - 2 * sizeof (short)];
-} *rbuf;
-#ifdef VMUNIX
-short	rused[256];
-#else
-short	rused[32];
-#endif
-short	rnleft;
-short	rblock;
-short	rnext;
-char	*rbufcp;
-
 regio(b, iofcn)
 	short b;
 	int (*iofcn)();
@@ -396,7 +396,7 @@ oops:
 		if (rfile < 0)
 			goto oops;
 	}
-	lseek(rfile, (long) b * BUFSIZ, SEEK_SET);
+	lseek(rfile, b * BUFSIZ, SEEK_SET);
 	if ((*iofcn)(rfile, rbuf, BUFSIZ) != BUFSIZ)
 		goto oops;
 	rblock = b;

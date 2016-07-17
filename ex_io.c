@@ -39,7 +39,7 @@ filename(int comm)
 	register int c = comm, d;
 	register int i;
 
-	d = getchar();
+	d = ex_getchar();
 	if (endcmd(d)) {
 		if (savedfile[0] == 0 && comm != 'f')
 			error("No file|No current filename");
@@ -120,11 +120,11 @@ getargs()
 	pastwh();
 	if (peekchar() == '+') {
 		for (cp = fpatbuf;;) {
-			c = *cp++ = getchar();
+			c = *cp++ = ex_getchar();
 			if (cp >= &fpatbuf[sizeof(fpatbuf)])
 				error("Pattern too long");
 			if (c == '\\' && isspace(peekchar()))
-				c = getchar();
+				c = ex_getchar();
 			if (c == EOF || isspace(c)) {
 				ungetchar(c);
 				*--cp = 0;
@@ -137,7 +137,7 @@ getargs()
 		return (0);
 	CP(genbuf, "echo "); cp = &genbuf[5];
 	for (;;) {
-		c = getchar();
+		c = ex_getchar();
 		if (endcmd(c)) {
 			ungetchar(c);
 			break;
@@ -146,7 +146,7 @@ getargs()
 
 		case '\\':
 			if (any(peekchar(), "#%|"))
-				c = getchar();
+				c = ex_getchar();
 			/* fall into... */
 
 		default:
@@ -823,7 +823,7 @@ iostats()
 			}
 			if (cntodd)
 				ex_printf("%D non-ASCII", cntodd);
-			putchar(')');
+			ex_putchar(')');
 		}
 		noonl();
 		flush();

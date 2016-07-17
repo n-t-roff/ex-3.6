@@ -22,7 +22,7 @@ unix0(warn)
 
 	printub = 0;
 	CP(puxb, uxb);
-	c = getchar();
+	c = ex_getchar();
 	if (c == '\n' || c == EOF)
 		error("Incomplete shell escape command@- use 'shell' to get a shell");
 	up = uxb;
@@ -31,7 +31,7 @@ unix0(warn)
 
 		case '\\':
 			if (any(peekchar(), "%#!"))
-				c = getchar();
+				c = ex_getchar();
 		default:
 			if (up >= &uxb[UXBSIZE]) {
 tunix:
@@ -78,7 +78,7 @@ uexp:
 			}
 			break;
 		}
-		c = getchar();
+		c = ex_getchar();
 	} while (c == '"' || c == '|' || !endcmd(c));
 	if (c == EOF)
 		ungetchar(c);

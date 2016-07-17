@@ -72,10 +72,10 @@ a.out: ${OBJS}
 	${CC} ${DEB} ${LDFLAGS} ${_LDFLAGS} ${OBJS} ${TERMLIB}
 
 exrecover: exrecover.o
-	${CC} ${DEB} ${LDFLAGS} ${_LDFLAGS} exrecover.o -o exrecover
+	${CC} ${DEB} ${LDFLAGS} ${_LDFLAGS} -o $@ exrecover.o
 
 expreserve: expreserve.o
-	${CC} ${DEB} ${LDFLAGS} ${_LDFLAGS} expreserve.o -o expreserve
+	${CC} ${DEB} ${LDFLAGS} ${_LDFLAGS} -o $@ expreserve.o
 
 .c.o:
 	${CC} ${CFLAGS} ${_CFLAGS} -c $<

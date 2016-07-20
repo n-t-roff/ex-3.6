@@ -1,8 +1,11 @@
+#if 0
 /* The pwb version this is based on */
 static char *printf_id = "@(#) printf.c:2.2 6/5/79";
 /* The local sccs version within ex */
 static char *sccsid = "@(#)printf.c	6.1 10/18/80";
+#endif
 #include <stdarg.h>
+#include "ex.h"
 /*
  * This version of printf is compatible with the Version 7 C
  * printf. The differences are only minor except that this
@@ -19,7 +22,8 @@ static char *sccsid = "@(#)printf.c	6.1 10/18/80";
 
 static int width, sign, fill;
 
-char *_p_dconv();
+static char *_p_dconv(long, char *);
+static void _p_emit(char *, char *);
 
 void
 ex_printf(const char *fmt, ...)
@@ -162,7 +166,7 @@ ex_printf(const char *fmt, ...)
 					*--bptr = ((int) num & mask1) + 060;
 				    else
 					*--bptr = ((int) num & mask1) + 0127;
-				while (num = (num >> nbits) & mask2);
+				while ((num = (num >> nbits) & mask2));
 				
 				if (fcode=='o') {
 					if (n)
@@ -198,7 +202,7 @@ ex_printf(const char *fmt, ...)
 					else
 						num = (long) n;
 				}
-				if (n = (fcode != 'u' && num < 0))
+				if ((n = (fcode != 'u' && num < 0)))
 					num = -num;
 				/* now convert to digits */
 				bptr = _p_dconv(num, buf);
@@ -232,10 +236,8 @@ ex_printf(const char *fmt, ...)
  * This program assumes it is running on 2's complement machine
  * with reasonable overflow treatment.
  */
-char *
-_p_dconv(value, buffer)
-	long value;
-	char *buffer;
+static char *
+_p_dconv(long value, char *buffer)
 {
 	register char *bp;
 	register int svalue;
@@ -304,9 +306,8 @@ _p_dconv(value, buffer)
  * any padding in right-justification (to avoid printing "-3" as
  * "000-3" where "-0003" was intended).
  */
-_p_emit(s, send)
-	register char *s;
-	char *send;
+static void
+_p_emit(char *s, char *send)
 {
 	char cfill;
 	register int alen;

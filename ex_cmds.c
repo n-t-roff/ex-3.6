@@ -582,7 +582,7 @@ suspend:
 				eol();
 				if (!c)
 					ckaw();
-				onsusp();
+				onsusp(0);
 				continue;
 #endif
 

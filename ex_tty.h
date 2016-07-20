@@ -143,7 +143,12 @@ short	destline;
 ttymode	normf;			/* Restore tty flags to this (someday) */
 bool	normtty;		/* Have to restore normal mode from normf */
 
-ttymode ostart(), setty(), unixex();
+ttymode ostart(void),
+	setty(ttymode),
+	unixex();
+void	ostop(ttymode);
+void	tostop(void);
+void	gTTY(int);
 
 short	WBOT;
 short	WECHO;

@@ -2,6 +2,7 @@
 /*
 static char *sccsid = "@(#)exrecover.c	6.1 10/18/80";
 */
+#include <stdlib.h>
 #include "ex.h"
 #include "ex_temp.h"
 #include "ex_tty.h"
@@ -102,7 +103,10 @@ main(int argc, char **argv)
 	cp = ctime(&H.Time);
 	cp[19] = 0;
 	fprintf(stderr, " [Dated: %s", cp);
-	fprintf(stderr, vercnt > 1 ? ", newest of %d saved]" : "]", vercnt);
+	if (vercnt > 1)
+		fprintf(stderr, ", newest of %d saved]", vercnt);
+	else
+		fprintf(stderr, "]");
 	H.Flines++;
 
 	/*
@@ -126,7 +130,7 @@ main(int argc, char **argv)
 	b = 0;
 	while (H.Flines > 0) {
 		ignorl(lseek(tfile, (long) blocks[b] * BUFSIZ, SEEK_SET));
-		i = H.Flines < BUFSIZ / sizeof (line) ?
+		i = H.Flines < (ssize_t)(BUFSIZ / sizeof (line)) ?
 			H.Flines * sizeof (line) : BUFSIZ;
 		if (read(tfile, (char *) dot, i) != i) {
 			perror(nb);
@@ -290,7 +294,7 @@ listfiles(char *dirname)
 		cp[10] = 0;
 		fprintf(stderr, "On %s at ", cp);
  		cp[16] = 0;
-		fprintf(stderr, &cp[11]);
+		fputs(&cp[11], stderr);
 		fprintf(stderr, " saved %d lines of file \"%s\"\n",
 		    fp->sf_lines, fp->sf_name);
 	}
@@ -350,7 +354,7 @@ qucmp(const void *vp1, const void *vp2)
 	struct svfile *p1 = (struct svfile *)vp1,
 		      *p2 = (struct svfile *)vp2;
 
-	if (t = strcmp(p1->sf_name, p2->sf_name))
+	if ((t = strcmp(p1->sf_name, p2->sf_name)))
 		return(t);
 	if (p1->sf_time > p2->sf_time)
 		return(-1);
@@ -427,7 +431,6 @@ searchdir(char *dirname)
 {
 	struct dirent *dirent;
 	register DIR *dir;
-	char dbuf[BUFSIZ];
 
 	dir = opendir(dirname);
 	if (dir == NULL)

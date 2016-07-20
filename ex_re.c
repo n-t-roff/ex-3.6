@@ -301,7 +301,7 @@ comprhs(seof)
 				 * and all other chars work fine quoted.
 				 */
 				if (c != '&')
-					c |= QUOTE;
+					c |= RE_QUOTE;
 				break;
 			}
 magic:
@@ -311,7 +311,7 @@ magic:
 						goto toobig;
 				continue;
 			}
-			c |= QUOTE;
+			c |= RE_QUOTE;
 			break;
 
 		case '\n':
@@ -373,7 +373,7 @@ confirmed(a)
 	pofix();
 	pline(lineno(a));
 	if (inopen)
-		ex_putchar('\n' | QUOTE);
+		ex_putchar('\n' | RE_QUOTE);
 	c = column(loc1 - 1);
 	ugo(c - 1 + (inopen ? 1 : 0), ' ');
 	ugo(column(loc2 - 1) - c, '^');
@@ -427,7 +427,7 @@ dosub()
 		*sp++ = *lp++;
 	casecnt = 0;
 	while (c = *rp++) {
-		if (c & QUOTE)
+		if (c & RE_QUOTE)
 			switch (c & TRIM) {
 
 			case '&':
@@ -634,7 +634,7 @@ magic:
 			case '~':
 				rhsp = rhsbuf;
 				while (*rhsp) {
-					if (*rhsp & QUOTE) {
+					if (*rhsp & RE_QUOTE) {
 						c = *rhsp & TRIM;
 						if (c == '&')
 error("Replacement pattern contains &@- cannot use in re");
@@ -653,7 +653,7 @@ error("Replacement pattern contains \\d@- cannot use in re");
 					break;
 				if (*lastep == CBRA || *lastep == CKET)
 cerror("Illegal *|Can't * a \\( ... \\) in regular expression");
-				if (*lastep == CCHR && (lastep[1] & QUOTE))
+				if (*lastep == CCHR && (lastep[1] & RE_QUOTE))
 cerror("Illegal *|Can't * a \\n in regular expression");
 				*lastep |= STAR;
 				continue;
@@ -671,7 +671,7 @@ cerror("Illegal *|Can't * a \\n in regular expression");
 cerror("Bad character class|Empty character class '[]' or '[^]' cannot match");
 				while (c != ']') {
 					if (c == '\\' && any(peekchar(), "]-^\\"))
-						c = ex_getchar() | QUOTE;
+						c = ex_getchar() | RE_QUOTE;
 					if (c == '\n' || c == EOF)
 						cerror("Missing ]");
 					*ep++ = c;
@@ -701,7 +701,7 @@ cerror("No newlines in re's|Can't escape newlines into regular expressions");
 			c -= '1';
 			if (c >= nbra)
 cerror("Bad \\n|\\n in regular expression with n greater than the number of \\('s");
-			*ep++ = c | QUOTE;
+			*ep++ = c | RE_QUOTE;
 			continue;
 */
 
@@ -813,7 +813,7 @@ advance(lp, ep)
 
 	case CCHR:
 /* useless
-		if (*ep & QUOTE) {
+		if (*ep & RE_QUOTE) {
 			c = *ep++ & TRIM;
 			sp = braslist[c];
 			sp1 = braelist[c];

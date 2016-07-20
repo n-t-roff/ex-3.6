@@ -12,7 +12,7 @@ git pull
 ```
 Some configuration (e.g. installation paths) can be done in the
 [`makefile`](https://github.com/n-t-roff/ex-3.6/blob/master/Makefile.in).
-For compiling it on BSD and Linux autoconfiguration is required:
+For compiling on BSD, Linux and Solaris autoconfiguration is required:
 ```sh
 $ ./configure
 ```
@@ -38,9 +38,3 @@ $ make distclean
   and
   [exrm.pdf](http://n-t-roff.github.io/ex/3.6/exrm.pdf)
   describe vi version 3.6 in detail.
-
-**Attention**:
-The original `vi` had not been 8-bit clean!
-Moreover it does automatically change all 8-bit characters to 7-bit
-in the whole file even if no editing is done!
-This will e.g. destroy all UTF-8 characters.

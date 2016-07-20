@@ -68,7 +68,7 @@ takeout(char *BUF)
 		cursor = cp;
 	}
 	setBUF(BUF);
-	if ((BUF[0] & (QUOTE|TRIM)) == OVERBUF)
+	if ((BUF[0] & (OVERBUF|TRIM)) == OVERBUF)
 		beep();
 }
 
@@ -170,7 +170,7 @@ vappend(int ch, int cnt, int indent)
 	 * so far (e.g. if we are a change.)
 	 */
 	if ((vglobp && *vglobp == 0) || peekbr()) {
-		if ((INS[0] & (QUOTE|TRIM)) == OVERBUF) {
+		if ((INS[0] & (OVERBUF|TRIM)) == OVERBUF) {
 			beep();
 			if (!splitw)
 				ungetkey('u');

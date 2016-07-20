@@ -374,8 +374,10 @@ rop(int c)
 			error(" Archive");
 
 		default:
+#ifndef BIT8
 			if (magic & 0100200)
 				error(" Non-ascii file");
+#endif
 			break;
 		}
 	}
@@ -609,7 +611,7 @@ static	char *nextip;
 
 getfile()
 {
-	register short c;
+	int c;
 	register char *lp, *fp;
 
 	lp = linebuf;
@@ -649,9 +651,11 @@ cntch);
 		}
 		if (c & QUOTE) {
 			cntodd++;
+#ifndef BIT8
 			c &= TRIM;
 			if (c == 0)
 				continue;
+#endif
 		}
 		*lp++ = c;
 	} while (c != '\n');

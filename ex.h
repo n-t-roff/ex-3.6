@@ -346,7 +346,7 @@ char	*tailpath();
 char	*tgetstr();
 char	*tgoto();
 char	*ttyname();
-line	*vback();
+line	*vback(line *, int);
 char	*vfindcol();
 char	*vgetline();
 char	*vinit();
@@ -446,7 +446,7 @@ void	ex_putchar(int);
 void	flush(void);
 void	flush1(void);
 void	fgoto(void);
-void	tab(int);
+void	ex_tab(int);
 void	noteinp(void);
 void	termreset(void);
 void	draino(void);
@@ -458,6 +458,11 @@ void	lprintf(char *, char *);
 void	putNFL(void);
 void	tostart(void);
 void	noonl(void);
+int	any(int, char *);
+int	backtab(int);
+void	change(void);
+int	column(char *);
+void	comment(void);
 
 /*
  * C doesn't have a (void) cast, so we have to fake it for lint's sake.

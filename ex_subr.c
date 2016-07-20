@@ -1,5 +1,7 @@
 /* Copyright (c) 1980 Regents of the University of California */
+/*
 static char *sccsid = "@(#)ex_subr.c	6.2 11/6/80";
+*/
 #include "ex.h"
 #include "ex_re.h"
 #include "ex_tty.h"
@@ -11,9 +13,8 @@ static char *sccsid = "@(#)ex_subr.c	6.2 11/6/80";
 
 static void save(line *, line *);
 
-any(c, s)
-	int c;
-	register char *s;
+int
+any(int c, char *s)
 {
 	register int x;
 
@@ -23,8 +24,8 @@ any(c, s)
 	return (0);
 }
 
-backtab(i)
-	register int i;
+int
+backtab(int i)
 {
 	register int j;
 
@@ -37,7 +38,8 @@ backtab(i)
 	return (i);
 }
 
-change()
+void
+change(void)
 {
 
 	tchng++;
@@ -50,8 +52,8 @@ change()
  * characters through position cp of the
  * current line.
  */
-column(cp)
-	register char *cp;
+int
+column(char *cp)
 {
 
 	if (cp == 0)
@@ -63,7 +65,8 @@ column(cp)
  * Ignore a comment to the end of the line.
  * This routine eats the trailing newline so don't call newline().
  */
-comment()
+void
+comment(void)
 {
 	register int c;
 

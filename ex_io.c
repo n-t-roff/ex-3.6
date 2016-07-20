@@ -794,7 +794,8 @@ source(char *fil, bool okfail)
 /*
  * Clear io statistics before a read or write.
  */
-clrstats()
+void
+clrstats(void)
 {
 
 	ninbuf = 0;

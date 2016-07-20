@@ -1,5 +1,7 @@
 /* Copyright (c) 1980 Regents of the University of California */
+/*
 static char *sccsid = "@(#)expreserve.c	6.1 10/18/80";
+*/
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
@@ -65,6 +67,9 @@ struct 	header {
 #define eq(a, b) strcmp(a, b) == 0
 
 static void notify(int, char *, int);
+static int copyout(char *);
+static void mkdigits(char *);
+static void mknext(char *);
 
 int
 main(int argc, char **argv)
@@ -142,8 +147,8 @@ char	pattern[] =	_PATH_PRESERVE "/Exaa`XXXXX";
  * file (this is the slowest thing since we must stat
  * to find a unique name), and finally copy the file.
  */
-copyout(name)
-	char *name;
+static int
+copyout(char *name)
 {
 	int i;
 	static int reenter;
@@ -267,8 +272,8 @@ format:
 /*
  * Blast the last 5 characters of cp to be the process number.
  */
-mkdigits(cp)
-	char *cp;
+static void
+mkdigits(char *cp)
 {
 	register int i, j;
 
@@ -281,8 +286,8 @@ mkdigits(cp)
  * three alphabetic characters into a sequence of the form 'aab', 'aac', etc.
  * Mktemp gets weird names too quickly to be useful here.
  */
-mknext(cp)
-	char *cp;
+static void
+mknext(char *cp)
 {
 	char *dcp;
 	struct stat stb;

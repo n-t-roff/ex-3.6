@@ -99,7 +99,7 @@ char	obuff[BUFSIZ];
 /* This definition also appears in expreserve.c... beware */
 struct 	header {
 	time_t	Time;			/* Time temp file last updated */
-	short	Uid;
+	uid_t	Uid;
 #ifndef VMUNIX
 	short	Flines;			/* Number of lines in file */
 #else

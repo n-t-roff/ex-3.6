@@ -613,61 +613,6 @@ smerror(char *seekpt, char *cp)
 		putpad(SE);
 }
 
-#define	std_nerrs (sizeof std_errlist / sizeof std_errlist[0])
-
-#define	error(i)	i
-
-#ifdef lint
-char	*std_errlist[] = {
-#else
-# ifdef VMUNIX
-char	*std_errlist[] = {
-# else
-short	std_errlist[] = {
-# endif
-#endif
-	error("Error 0"),
-	error("Not super-user"),
-	error("No such file or directory"),
-	error("No such process"),
-	error("Interrupted system call"),
-	error("Physical I/O error"),
-	error("No such device or address"),
-	error("Argument list too long"),
-	error("Exec format error"),
-	error("Bad file number"),
-	error("No children"),
-	error("No more processes"),
-	error("Not enough core"),
-	error("Permission denied"),
-	error("Bad address"),
-	error("Block device required"),
-	error("Mount device busy"),
-	error("File exists"),
-	error("Cross-device link"),
-	error("No such device"),
-	error("Not a directory"),
-	error("Is a directory"),
-	error("Invalid argument"),
-	error("File table overflow"),
-	error("Too many open files"),
-	error("Not a typewriter"),
-	error("Text file busy"),
-	error("File too large"),
-	error("No space left on device"),
-	error("Illegal seek"),
-	error("Read-only file system"),
-	error("Too many links"),
-	error("Broken pipe"),
-#ifndef V6
-	error("Math argument"),
-	error("Result too large"),
-#endif
-	error("Quota exceeded")		/* Berkeley quota systems only */
-};
-
-#undef	error
-
 char *
 strend(cp)
 	register char *cp;
@@ -685,17 +630,13 @@ strcLIN(dp)
 	CP(linebuf, dp);
 }
 
-syserror()
+void
+syserror(void)
 {
-	register int e = errno;
-
 	dirtcnt = 0;
 	ex_putchar(' ');
 	edited = 0;	/* for temp file errors, for example */
-	if (e >= 0 && errno <= std_nerrs)
-		error(std_errlist[e]);
-	else
-		ierror("System error %d", e);
+	error(strerror(errno));
 }
 
 /*

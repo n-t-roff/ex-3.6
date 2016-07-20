@@ -27,6 +27,7 @@ struct	rbuf {
 } *rbuf;
 
 static void rbflush(void);
+static void blkio(int, void *, ssize_t (*)());
 
 #ifdef VMUNIX
 short	rused[256];
@@ -115,8 +116,8 @@ cleanup(all)
 	}
 }
 
-ex_getline(tl)
-	line tl;
+void
+ex_getline(line tl)
 {
 	register char *bp, *lp;
 	register int nl;
@@ -252,8 +253,8 @@ char	incorb[INCORB+1][BUFSIZ];
 int	stilinc;	/* up to here not written yet */
 #endif
 
-void
-blkio(short b, char *buf, int (*iofcn)())
+static void
+blkio(int b, void *buf, ssize_t (*iofcn)())
 {
 
 #ifdef VMUNIX

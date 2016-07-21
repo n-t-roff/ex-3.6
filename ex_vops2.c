@@ -420,7 +420,7 @@ vgetline(int cnt, char *gcursor, bool *aescaped, int commch)
 	int x, y, iwhite, backsl=0;
 	char *iglobp;
 	char cstr[2];
-	int (*OO)() = Outchar;
+	void (*OO)() = Outchar;
 
 	/*
 	 * Clear the output state and counters
@@ -625,7 +625,7 @@ vbackup:
 			}
 			if (value(WRAPMARGIN) &&
 				(outcol >= OCOLUMNS - value(WRAPMARGIN) ||
-				 backsl && outcol==0) &&
+				 (backsl && outcol==0)) &&
 				commch != 'r') {
 				/*
 				 * At end of word and hit wrapmargin.
@@ -769,7 +769,7 @@ vbackup:
 			 * generated autoindent.  We count the ^D for repeat
 			 * purposes.
 			 */
-			if (c == iwhite && c != 0)
+			if (c == iwhite && c != 0) {
 				if (cp == gcursor) {
 					iwhite = backtab(c);
 					CDCNT++;
@@ -793,6 +793,7 @@ vbackup:
 					vputchar(' ');
 					goto vbackup;
 				}
+			}
 			if (vglobp && vglobp - iglobp >= 2 &&
 			    (vglobp[-2] == '^' || vglobp[-2] == '0')
 			    && gcursor == ogcursor + 1)

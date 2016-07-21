@@ -312,3 +312,14 @@ void	setDEL(void);
 void	setBUF(char *);
 int	noteit(bool);
 int	vgetcnt(void);
+int	lfind(bool, int, void (*)(), line *);
+#ifdef LISPCODE
+int	lindent(line *);
+#endif
+int	lmatchp(line *);
+void	lsmatch(char *);
+int	lnext(void);
+int	lbrack(int, void (*)());
+int	word(void (*)(), int);
+int	wordof(int, char *);
+int	wordch(char *);

@@ -178,7 +178,6 @@ vmacchng(bool fromvis)
 	int nlines, more;
 	register line *a1, *a2;
 	char ch;	/* DEBUG */
-	int copyw(), copywR();
 
 	if (!inopen)
 		return;

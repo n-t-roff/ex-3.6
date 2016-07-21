@@ -137,10 +137,8 @@ $TMPNAM: ${TMPNAM}.o
 	\$(CC) \$(DEB) -o \$@ ${TMPNAM}.o \$(TERMLIB)
 EOT
 	cat <<EOT >>$TMPC
-#include <term.h>
-#include "ex.h"
-#include "ex_tty.h"
 int main() {
+	int tgetent(char *, const char *);
 	char tcbuf[1024];
 	char *terms[] = { "xterm", "screen" };
 	unsigned i;

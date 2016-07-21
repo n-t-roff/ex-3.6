@@ -78,9 +78,8 @@ comment(void)
 		ungetchar(c);
 }
 
-Copy(to, from, size)
-	register char *from, *to;
-	register int size;
+void
+Copy(char *to, char *from, int size)
 {
 
 	if (size > 0)
@@ -89,9 +88,8 @@ Copy(to, from, size)
 		while (--size > 0);
 }
 
-copyw(to, from, size)
-	register line *from, *to;
-	register int size;
+void
+copyw(line *to, line *from, int size)
 {
 
 	if (size > 0)
@@ -100,23 +98,23 @@ copyw(to, from, size)
 		while (--size > 0);
 }
 
-copywR(to, from, size)
-	register line *from, *to;
-	register int size;
+void
+copywR(line *to, line *from, int size)
 {
 
 	while (--size >= 0)
 		to[size] = from[size];
 }
 
-ctlof(c)
-	int c;
+int
+ctlof(int c)
 {
 
 	return (c == TRIM ? '?' : c | ('A' - 1));
 }
 
-dingdong()
+void
+dingdong(void)
 {
 
 	if (VB)
@@ -125,8 +123,8 @@ dingdong()
 		putch('\207');
 }
 
-fixindent(indent)
-	int indent;
+int
+fixindent(int indent)
 {
 	register int i;
 	register char *cp;
@@ -141,8 +139,8 @@ fixindent(indent)
 	return (i);
 }
 
-filioerr(cp)
-	char *cp;
+void
+filioerr(char *cp)
 {
 	register int oerrno = errno;
 
@@ -152,8 +150,7 @@ filioerr(cp)
 }
 
 char *
-genindent(indent)
-	register int indent;
+genindent(int indent)
 {
 	register char *cp;
 

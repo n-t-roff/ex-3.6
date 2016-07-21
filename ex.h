@@ -79,6 +79,14 @@ typedef	short	bool;
 
 #include "ex_tune.h"
 #include "ex_vars.h"
+
+int tgetent(char *, const char *);
+int tgetflag(char *);
+int tgetnum(char *);
+char *tgetstr(char *, char **);
+char *tgoto(const char *, int, int);
+int tputs(const char *, int, int (*)(int));
+
 /*
  * Options in the editor are referred to usually by "value(name)" where
  * name is all uppercase, i.e. "value(PROMPT)".  This is actually a macro
@@ -329,7 +337,7 @@ void	(*setlist(bool))();
 void	(*setnumb(bool))();
 line	*address();
 char	*cgoto();
-char	*genindent();
+char	*genindent(int);
 char	*getblock(line, int);
 char	*getenv();
 line	*getmark(int);
@@ -492,6 +500,13 @@ void	strcLIN(char *);
 int	tabcol(int, int);
 int	whitecnt(char *);
 void	markit(line *);
+void	Copy(char *, char *, int);
+void	copyw(line *, line *, int);
+void	copywR(line *, line *, int);
+int	ctlof(int);
+void	dingdong(void);
+int	fixindent(int);
+void	filioerr(char *);
 
 /*
  * C doesn't have a (void) cast, so we have to fake it for lint's sake.

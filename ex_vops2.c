@@ -341,7 +341,7 @@ vappend(int ch, int cnt, int indent)
 		 * correctly later.
 		 */
 		if (FIXUNDO && vundkind == VCHNG) {
-			vremote(1, yank, 0);
+			vremote(1, (void (*)(int))yank, 0);
 			undap1--;
 		}
 

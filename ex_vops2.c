@@ -1,5 +1,7 @@
 /* Copyright (c) 1980 Regents of the University of California */
+/*
 static char *sccsid = "@(#)ex_vops2.c	6.2 10/23/80";
+*/
 #include "ex.h"
 #include "ex_tty.h"
 #include "ex_vis.h"
@@ -9,6 +11,9 @@ static char *sccsid = "@(#)ex_vops2.c	6.2 10/23/80";
  * and mostly, insert mode (and a subroutine
  * to read an input line, including in the echo area.)
  */
+static int vgetsplit(void);
+static int vmaxrep(int, int);
+
 extern char	*vUA1, *vUA2;
 extern char	*vUD1, *vUD2;
 
@@ -16,9 +21,8 @@ extern char	*vUD1, *vUD2;
  * Obleeperate characters in hardcopy
  * open with \'s.
  */
-bleep(i, cp)
-	register int i;
-	char *cp;
+void
+bleep(int i, char *cp)
 {
 
 	i -= column(cp);
@@ -32,7 +36,8 @@ bleep(i, cp)
  * Common code for middle part of delete
  * and change operating on parts of lines.
  */
-vdcMID()
+int
+vdcMID(void)
 {
 	register char *cp;
 
@@ -76,7 +81,8 @@ takeout(char *BUF)
  * Are we at the end of the printed representation of the
  * line?  Used internally in hardcopy open.
  */
-ateopr()
+int
+ateopr(void)
 {
 	register int i, c;
 	register char *cp = vtube[destline] + destcol;
@@ -384,7 +390,8 @@ vappend(int ch, int cnt, int indent)
  * backwards around end of lines (vgoto can't hack columns which are
  * less than 0 in general).
  */
-back1()
+void
+back1(void)
 {
 
 	vgoto(destline - 1, WCOLS + destcol - 1);
@@ -406,11 +413,7 @@ back1()
  * involved, including the prompt for readline.
  */
 char *
-vgetline(cnt, gcursor, aescaped, commch)
-	int cnt;
-	register char *gcursor;
-	bool *aescaped;
-	char commch;
+vgetline(int cnt, char *gcursor, bool *aescaped, int commch)
 {
 	register int c, ch;
 	register char *cp;
@@ -834,8 +837,8 @@ char	*vsplitpt;
  * Append the line in buffer at lp
  * to the buffer after dot.
  */
-vdoappend(lp)
-	char *lp;
+void
+vdoappend(char *lp)
 {
 	register int oing = inglobal;
 
@@ -848,7 +851,8 @@ vdoappend(lp)
 /*
  * Subroutine for vdoappend to pass to append.
  */
-vgetsplit()
+static int
+vgetsplit(void)
 {
 
 	if (vsplitpt == 0)
@@ -863,9 +867,8 @@ vgetsplit()
  * allowed that will yield total line length less than
  * LBSIZE characters and also does hacks for the R command.
  */
-vmaxrep(ch, cnt)
-	char ch;
-	register int cnt;
+static int
+vmaxrep(int ch, int cnt)
 {
 	register int len, replen;
 

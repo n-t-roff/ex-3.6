@@ -41,6 +41,9 @@
  * of additional terminal descriptions you add to the termcap data base.
  */
 
+#include <time.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -333,7 +336,7 @@ char	*getpass();
 extern void	(*Outchar)();
 extern void	(*Pline)();
 extern void	(*Putchar)();
-int	(*oldhup)();
+void	(*oldhup)(int);
 void	(*setlist(bool))();
 void	(*setnumb(bool))();
 line	*address(char *);
@@ -341,12 +344,12 @@ char	*cgoto();
 char	*genindent(int);
 char	*getblock(line, int);
 line	*getmark(int);
-char	*longname();
+char	*longname(char *, char *);
 char	*mesg(char *);
 char	*place(char *, char *, char *);
 char	*plural(long);
 line	*scanfor();
-line	*setin();
+void	setin(line *);
 char	*strend(char *);
 char	*tailpath(char *);
 char	*ttyname();
@@ -363,7 +366,7 @@ void	delete(bool);
 void	filter(int);
 int	getfile(void);
 int	getsub(void);
-int	gettty();
+int	gettty(void);
 void	join(int);
 void	listchar(int);
 void	normline(void);
@@ -561,6 +564,13 @@ int	substitute(int);
 int	compile(int, int);
 int	same(int, int);
 int	execute(int, line *);
+void	setterm(char *);
+char	*fkey(int);
+void	ignchar(void);
+int	ex_getchar(void);
+int	getcd(void);
+int	peekchar(void);
+int	peekcd(void);
 
 /*
  * C doesn't have a (void) cast, so we have to fake it for lint's sake.

@@ -1,5 +1,7 @@
 /* Copyright (c) 1980 Regents of the University of California */
+/*
 static char *sccsid = "@(#)ex_tty.c	6.2 10/30/80";
+*/
 #include "ex.h"
 #include "ex_tty.h"
 
@@ -9,6 +11,10 @@ static char *sccsid = "@(#)ex_tty.c	6.2 10/30/80";
  * a shell escape which may change them.
  */
 /* short	ospeed = -1; */
+
+static void zap(void);
+static int cost(char *);
+static int countnum(int);
 
 void
 gettmode(void)
@@ -54,8 +60,9 @@ bool *sflags[] = {
 char **fkeys[10] = {
 	&F0, &F1, &F2, &F3, &F4, &F5, &F6, &F7, &F8, &F9
 };
-setterm(type)
-	char *type;
+
+void
+setterm(char *type)
 {
 	char *tgoto();
 	register int unknown, i;
@@ -144,7 +151,8 @@ setterm(type)
 		serror("%s: Unknown terminal type", type);
 }
 
-zap()
+static void
+zap(void)
 {
 	register char *namp;
 	register bool **fp;
@@ -165,9 +173,7 @@ zap()
 }
 
 char *
-longname(bp, def)
-	register char *bp;
-	char *def;
+longname(char *bp, char *def)
 {
 	register char *cp;
 
@@ -185,8 +191,7 @@ longname(bp, def)
 }
 
 char *
-fkey(i)
-	int i;
+fkey(int i)
 {
 	if (0 <= i && i <= 9)
 		return(*fkeys[i]);
@@ -205,11 +210,10 @@ fkey(i)
  * than AL vs SR, won't be really affected.)
  */
 static int costnum;
-cost(str)
-char *str;
-{
-	int countnum();
 
+static int
+cost(char *str)
+{
 	if (str == NULL)
 		return 10000;	/* infinity */
 	costnum = 0;
@@ -217,9 +221,9 @@ char *str;
 	return costnum;
 }
 
-/* ARGSUSED */
-countnum(ch)
-char ch;
+static int
+countnum(int ch)
 {
-	costnum++;
+	(void)ch;
+	return costnum++;
 }

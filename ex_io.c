@@ -92,7 +92,7 @@ filename(int comm)
 			break;
 		}
 	}
-	if (hush && comm != 'f' || comm == 'E')
+	if ((hush && comm != 'f') || comm == 'E')
 		return;
 	if (file[0] != 0) {
 		lprintf("\"%s\"", file);
@@ -379,9 +379,11 @@ rop(int c)
 		 * and copy them to another system with ~%take, since
 		 * the files sometimes show up munged and must be fixed.
 		 */
+#if 0
 		case 0177545:
 		case 0177555:
 			error(" Archive");
+#endif
 
 		default:
 #ifndef BIT8
@@ -570,11 +572,12 @@ cre:
 		if (io < 0)
 			syserror();
 		writing = 1;
-		if (hush == 0)
+		if (hush == 0) {
 			if (nonexist)
 				ex_printf(" [New file]");
 			else if (value(WRITEANY) && edfile() != EDF)
 				ex_printf(" [Existing file]");
+		}
 		break;
 
 	case 2:

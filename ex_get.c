@@ -1,22 +1,31 @@
 /* Copyright (c) 1980 Regents of the University of California */
+/*
 static char *sccsid = "@(#)ex_get.c	6.1 10/18/80";
+*/
 #include "ex.h"
 #include "ex_tty.h"
+#include "ex_vis.h"
 
 /*
  * Input routines for command mode.
  * Since we translate the end of reads into the implied ^D's
  * we have different flavors of routines which do/don't return such.
  */
+static int getach(void);
+static int smunch(int, char *);
+static void checkjunk(int);
+
 static	bool junkbs;
 short	lastc = '\n';
 
-ignchar()
+void
+ignchar(void)
 {
 	ignore(ex_getchar());
 }
 
-ex_getchar()
+int
+ex_getchar(void)
 {
 	register int c;
 
@@ -26,7 +35,8 @@ ex_getchar()
 	return (c);
 }
 
-getcd()
+int
+getcd(void)
 {
 	register int c;
 
@@ -35,17 +45,19 @@ again:
 	if (c == EOF)
 		return (c);
 	c &= TRIM;
-	if (!inopen)
+	if (!inopen) {
 		if (!globp && c == CTRL('d'))
 			setlastchar('\n');
 		else if (junk(c)) {
 			checkjunk(c);
 			goto again;
 		}
+	}
 	return (c);
 }
 
-peekchar()
+int
+peekchar(void)
 {
 
 	if (peekc == 0)
@@ -53,7 +65,8 @@ peekchar()
 	return (peekc);
 }
 
-peekcd()
+int
+peekcd(void)
 {
 
 	if (peekc == 0)
@@ -61,7 +74,8 @@ peekcd()
 	return (peekc);
 }
 
-getach()
+static int
+getach(void)
 {
 	register int c;
 	static char in_line[128];
@@ -79,7 +93,7 @@ getach()
 	}
 top:
 	if (input) {
-		if (c = *input++) {
+		if ((c = *input++)) {
 			if (c &= TRIM)
 				return (lastc = c);
 			goto top;
@@ -98,7 +112,11 @@ top:
 		in_line[c] = 0;
 		for (c--; c >= 0; c--)
 			if (in_line[c] == 0)
+#ifdef BIT8
+				in_line[c] = ' ';
+#else
 				in_line[c] = QUOTE;
+#endif
 		input = in_line;
 		goto top;
 	}
@@ -115,7 +133,8 @@ top:
  */
 static	short	lastin;
 
-gettty()
+int
+gettty(void)
 {
 	register int c = 0;
 	register char *cp = genbuf;
@@ -217,9 +236,8 @@ gettty()
  * This should really be done differently so as to use the whitecnt routine
  * and also to hack indenting for LISP.
  */
-smunch(col, ocp)
-	register int col;
-	char *ocp;
+static int
+smunch(int col, char *ocp)
 {
 	register char *cp;
 
@@ -244,8 +262,8 @@ smunch(col, ocp)
 
 char	*cntrlhm =	"^H discarded\n";
 
-checkjunk(c)
-	char c;
+static void
+checkjunk(int c)
 {
 
 	if (junkbs == 0 && c == '\b') {
@@ -254,9 +272,8 @@ checkjunk(c)
 	}
 }
 
-line *
-setin(addr)
-	line *addr;
+void
+setin(line *addr)
 {
 
 	if (addr == zero)

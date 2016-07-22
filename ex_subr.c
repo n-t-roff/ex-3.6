@@ -19,7 +19,7 @@ any(int c, char *s)
 {
 	register int x;
 
-	while (x = *s++)
+	while ((x = *s++))
 		if (x == c)
 			return (1);
 	return (0);
@@ -448,7 +448,7 @@ void
 putmk1(line *addr, int n)
 {
 	register line *markp;
-	register oldglobmk;
+	int oldglobmk;
 
 	oldglobmk = *addr & 1;
 	*addr &= ~1;
@@ -472,7 +472,7 @@ int
 qcolumn(char *lim, char *gp)
 {
 	register int x;
-	int (*OO)();
+	void (*OO)();
 
 	OO = Outchar;
 	Outchar = qcount;
@@ -656,7 +656,7 @@ vfindcol(int i)
 {
 	register char *cp;
 	char *s;
-	register int (*OO)() = Outchar;
+	void (*OO)() = Outchar;
 
 	Outchar = qcount;
 	s = linebuf;

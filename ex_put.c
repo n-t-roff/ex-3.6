@@ -53,7 +53,7 @@ setnumb(bool t))()
 
 	numberf = t;
 	P = Pline;
-	Pline = t ? numbline : normline;
+	Pline = t ? (void (*)())numbline : normline;
 	return (P);
 }
 
@@ -84,7 +84,7 @@ listchar(int c)
 	default:
 		if (c & QUOTE)
 			break;
-		if (c < ' ' && c != '\n' || c == DELETE)
+		if ((c < ' ' && c != '\n') || c == DELETE)
 			outchar('^'), c = ctlof(c);
 		break;
 	}
@@ -123,9 +123,9 @@ normchar(int c)
 				ex_putchar('^'), c = ctlof(c);
 #endif
 		}
-	else if (c < ' ' && (c != '\b' || !OS) && c != '\n' && c != '\t' || c == DELETE)
+	else if ((c < ' ' && (c != '\b' || !OS) && c != '\n' && c != '\t') || c == DELETE)
 		ex_putchar('^'), c = ctlof(c);
-	else if (UPPERCASE)
+	else if (UPPERCASE) {
 		if (isupper(c)) {
 			outchar('\\');
 			c = tolower(c);
@@ -138,6 +138,7 @@ normchar(int c)
 					break;
 				}
 		}
+	}
 	outchar(c);
 }
 
@@ -359,11 +360,12 @@ fgoto(void)
 		outcol %= COLUMNS;
 		if (AM == 0) {
 			while (l > 0) {
-				if (pfast)
+				if (pfast) {
 					if (xCR)
 						tputs(xCR, 0, putch);
 					else
 						putch('\r');
+				}
 				if (xNL)
 					tputs(xNL, 0, putch);
 				else
@@ -415,7 +417,7 @@ fgoto(void)
 				outcol = 0;
 		}
 	}
-	if (destline < outline && !(CA && !holdcm || UP != NOSTR))
+	if (destline < outline && !((CA && !holdcm) || UP != NOSTR))
 		destline = outline;
 	if (CA && !holdcm)
 		if (plod(costCM) > 0)
@@ -565,7 +567,7 @@ plod(int cnt)
 	 * If it will be cheaper, or if we can't back up, then send
 	 * a return preliminarily.
 	 */
-	if (j > i + 1 || outcol > destcol && !BS && !BC) {
+	if (j > i + 1 || (outcol > destcol && !BS && !BC)) {
 		/*
 		 * BUG: this doesn't take the (possibly long) length
 		 * of xCR into account.

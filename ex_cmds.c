@@ -459,7 +459,7 @@ quit:
 				setty(normf);
 			}
 			cleanup(1);
-			exit(0);
+			ex_exit(0);
 
 		case 'r':
 			if (peekchar() == 'e') {
@@ -847,7 +847,7 @@ numberit:
 					 * input which was a tty to suddenly be
 					 * turned into /dev/null.
 					 */
-					onhup();
+					onhup(0);
 				return;
 			}
 			if (addr2 != 0) {

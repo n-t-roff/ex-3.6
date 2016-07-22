@@ -41,6 +41,7 @@
  * of additional terminal descriptions you add to the termcap data base.
  */
 
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -335,24 +336,19 @@ extern void	(*Putchar)();
 int	(*oldhup)();
 void	(*setlist(bool))();
 void	(*setnumb(bool))();
-line	*address();
+line	*address(char *);
 char	*cgoto();
 char	*genindent(int);
 char	*getblock(line, int);
-char	*getenv();
 line	*getmark(int);
 char	*longname();
 char	*mesg(char *);
-char	*place();
+char	*place(char *, char *, char *);
 char	*plural(long);
 line	*scanfor();
 line	*setin();
-char	*strcat();
-char	*strcpy();
 char	*strend(char *);
-char	*tailpath();
-char	*tgetstr();
-char	*tgoto();
+char	*tailpath(char *);
 char	*ttyname();
 line	*vback(line *, int);
 char	*vfindcol(int);
@@ -365,16 +361,16 @@ void	putreg(int);
 void	YANKreg(int);
 void	delete(bool);
 void	filter(int);
-int	getfile();
-int	getsub();
+int	getfile(void);
+int	getsub(void);
 int	gettty();
 void	join(int);
 void	listchar(int);
 void	normline(void);
 void	numbline(int);
-int	(*oldquit)();
-int	onhup();
-int	onintr();
+void	(*oldquit)(int);
+void	onhup(int);
+void	onintr(int);
 void	onsusp(int);
 int	putch(int);
 void	shift(int, int);
@@ -532,6 +528,39 @@ void	waitfor(void);
 void	revocer(void);
 int	endcmd(int);
 int	cmdreg(void);
+void	eol(void);
+void	erewind(void);
+void	fixol(void);
+int	exclam(void);
+void	makargs(void);
+void	next(void);
+int	quickly(void);
+int	skipend(void);
+void	tailspec(int);
+void	tail(char *);
+void	tail2of(char *);
+void	tailprim(char *, int, bool);
+void	vnfl(void);
+int	getargs(void);
+void	getone(void);
+void	rop2(void);
+void	rop3(int);
+void	wop(bool);
+void	init(void);
+void	setrupt(void);
+int	preserve(void);
+void	ex_exit(int);
+void	setdot(void);
+void	setdot1(void);
+int	getnum(void);
+void	setnoaddr(void);
+void	setCNL(void);
+void	setNAEOL(void);
+void	global(bool);
+int	substitute(int);
+int	compile(int, int);
+int	same(int, int);
+int	execute(int, line *);
 
 /*
  * C doesn't have a (void) cast, so we have to fake it for lint's sake.

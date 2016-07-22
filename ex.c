@@ -1,5 +1,7 @@
 /* Copyright (c) 1980 Regents of the University of California */
+/*
 static char *sccsid = "%W% %G%";
+*/
 #include "ex.h"
 #include "ex_argv.h"
 #include "ex_temp.h"
@@ -68,9 +70,8 @@ char	tttrace[]	= { '/','d','e','v','/','t','t','y','x','x',0 };
  * there is a 'd' in our name.  For edit we just diddle options;
  * for vi we actually force an early visual command.
  */
-main(ac, av)
-	register int ac;
-	register char *av[];
+int
+main(int ac, char **av)
 {
 #ifndef VMUNIX
 	char *erpath = EXSTRINGS;
@@ -277,7 +278,7 @@ main(ac, av)
 			setrupt();
 			execl(EXRECOVER, "exrecover", "-r", 0);
 			filioerr(EXRECOVER);
-			exit(1);
+			ex_exit(1);
 		}
 		CP(savedfile, *av++), ac--;
 	}
@@ -371,7 +372,7 @@ main(ac, av)
 	setexit();
 	commands(0, 0);
 	cleanup(1);
-	exit(0);
+	return 0;
 }
 
 /*
@@ -379,7 +380,8 @@ main(ac, av)
  * Main thing here is to get a new buffer (in fileinit),
  * rest is peripheral state resetting.
  */
-init()
+void
+init(void)
 {
 	register int i;
 
@@ -410,9 +412,10 @@ init()
  * as they are a backup even without preservation if they
  * are not removed.
  */
-onhup()
+void
+onhup(int i)
 {
-
+	(void)i;
 	/*
 	 * USG tty driver can send multiple HUP's!!
 	 */
@@ -420,15 +423,15 @@ onhup()
 	signal(SIGHUP, SIG_IGN);
 	if (chng == 0) {
 		cleanup(1);
-		exit(0);
+		ex_exit(0);
 	}
 	if (setexit() == 0) {
 		if (preserve()) {
 			cleanup(1);
-			exit(0);
+			ex_exit(0);
 		}
 	}
-	exit(1);
+	ex_exit(1);
 }
 
 /*
@@ -439,9 +442,10 @@ onhup()
  * Then like a normal error (with the \n before Interrupt
  * suppressed in visual mode).
  */
-onintr()
+void
+onintr(int i)
 {
-
+	(void)i;
 #ifndef CBREAK
 	signal(SIGINT, onintr);
 #else
@@ -465,7 +469,8 @@ onintr()
  * In some critical sections we turn interrupts off,
  * but not very often.
  */
-setrupt()
+void
+setrupt(void)
 {
 
 	if (ruptible) {
@@ -481,7 +486,8 @@ setrupt()
 	}
 }
 
-preserve()
+int
+preserve(void)
 {
 
 #ifdef VMUNIX
@@ -495,7 +501,7 @@ preserve()
 		close(0);
 		dup(tfile);
 		execl(EXPRESERVE, "expreserve", (char *) 0);
-		exit(1);
+		ex_exit(1);
 	}
 	waitfor();
 	if (rpid == pid && status == 0)
@@ -504,8 +510,8 @@ preserve()
 }
 
 #ifndef V6
-exit(i)
-	int i;
+void
+ex_exit(int i)
 {
 
 # ifdef TRACE
@@ -520,8 +526,7 @@ exit(i)
  * Return last component of unix path name p.
  */
 char *
-tailpath(p)
-register char *p;
+tailpath(char *p)
 {
 	register char *r;
 

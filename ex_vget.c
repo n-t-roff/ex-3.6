@@ -157,7 +157,7 @@ again:
 				d = toupper(c);
 			else {
 				colp = "({)}!|^~'~";
-				while (d = *colp++)
+				while ((d = *colp++))
 					if (d == c) {
 						d = *colp++;
 						break;
@@ -243,7 +243,7 @@ int
 readecho(int c)
 {
 	register char *sc = cursor;
-	register int (*OP)();
+	void (*OP)();
 	bool waste;
 	register int OPeek;
 
@@ -364,7 +364,7 @@ noteit(bool must)
 {
 	register int sdl = destline, sdc = destcol;
 
-	if (notecnt < 2 || !must && state == VISUAL)
+	if (notecnt < 2 || (!must && state == VISUAL))
 		return (0);
 	splitw++;
 	if (WBOT == WECHO)
@@ -451,7 +451,7 @@ map(int c, struct maps *maps)
 		if (trace)
 			fprintf(trace,"\ntry '%s', ",maps[d].cap);
 #endif
-		if (p = maps[d].cap) {
+		if ((p = maps[d].cap)) {
 			for (q=b; *p; p++, q++) {
 #ifdef MDEBUG
 				if (trace)

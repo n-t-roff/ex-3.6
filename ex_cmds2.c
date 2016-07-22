@@ -13,6 +13,7 @@ extern int	poffset;
 
 static void error0(void);
 static void setflav(void);
+static void error1(char *);
 
 /*
  * Subroutines for major command loop.
@@ -56,7 +57,8 @@ endcmd(int ch)
 /*
  * Insist on the end of the command.
  */
-eol()
+void
+eol(void)
 {
 
 	if (!skipend())
@@ -90,7 +92,8 @@ ierror(char *str, int i)
 /*
  * Rewind the argument list.
  */
-erewind()
+void
+erewind(void)
 {
 
 	argc = argc0;
@@ -166,8 +169,8 @@ error0(void)
  * Otherwise, in the normal command mode error case,
  * finish state reset, and throw to top.
  */
-error1(str)
-	char *str;
+static void
+error1(char *str)
 {
 	bool die;
 
@@ -189,7 +192,7 @@ error1(str)
 	if (str && !vcatch)
 		putNFL();
 	if (die)
-		exit(1);
+		ex_exit(1);
 	lseek(0, 0L, SEEK_END);
 	if (inglobal)
 		setlastchar('\n');
@@ -200,7 +203,8 @@ error1(str)
 	reset();
 }
 
-fixol()
+void
+fixol(void)
 {
 	if (Outchar != vputchar) {
 		flush();
@@ -218,7 +222,8 @@ fixol()
 /*
  * Does an ! character follow in the command stream?
  */
-exclam()
+int
+exclam(void)
 {
 
 	if (peekchar() == '!') {
@@ -231,7 +236,8 @@ exclam()
 /*
  * Make an argument list for e.g. next.
  */
-makargs()
+void
+makargs(void)
 {
 
 	glob(&frob);
@@ -244,7 +250,8 @@ makargs()
 /*
  * Advance to next file in argument list.
  */
-next()
+void
+next(void)
 {
 	extern short isalt;	/* defined in ex_io.c */
 
@@ -334,7 +341,8 @@ nomore(void)
  * Before edit of new file check that either an ! follows
  * or the file has not been changed.
  */
-quickly()
+int
+quickly(void)
 {
 
 	if (exclam())
@@ -398,7 +406,8 @@ setflav(void)
 /*
  * Skip white space and tell whether command ends then.
  */
-skipend()
+int
+skipend(void)
 {
 
 	pastwh();
@@ -408,8 +417,8 @@ skipend()
 /*
  * Set the command name for non-word commands.
  */
-tailspec(c)
-	int c;
+void
+tailspec(int c)
 {
 	static char foocmd[2];
 
@@ -421,15 +430,15 @@ tailspec(c)
  * Try to read off the rest of the command word.
  * If alphabetics follow, then this is not the command we seek.
  */
-tail(comm)
-	char *comm;
+void
+tail(char *comm)
 {
 
 	tailprim(comm, 1, 0);
 }
 
-tail2of(comm)
-	char *comm;
+void
+tail2of(char *comm)
 {
 
 	tailprim(comm, 2, 0);
@@ -437,10 +446,8 @@ tail2of(comm)
 
 char	tcommand[20];
 
-tailprim(comm, i, notinvis)
-	register char *comm;
-	int i;
-	bool notinvis;
+void
+tailprim(char *comm, int i, bool notinvis)
 {
 	register char *cp;
 	register int c;
@@ -542,7 +549,8 @@ vcontin(bool ask)
  * Put out a newline (before a shell escape)
  * if in open/visual.
  */
-vnfl()
+void
+vnfl(void)
 {
 
 	if (inopen) {

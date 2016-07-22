@@ -81,7 +81,7 @@ dumbness:
 		else
 			putNFL();
 		cleanup(1);
-		exit(1);
+		ex_exit(1);
 	}
 	if ((stbuf.st_mode & S_IFMT) != S_IFDIR) {
 		errno = ENOTDIR;
@@ -818,7 +818,7 @@ char *buffer;
 		dup(pf[1]);
 		execl("/usr/lib/makekey", "-", 0);
 		execl("/lib/makekey", "-", 0);
-		exit(1);
+		ex_exit(1);
 	}
 	write(pf[1], buffer, 10);
 	if (wait((int *)NULL)==-1 || read(pf[0], buffer, 13)!=13)

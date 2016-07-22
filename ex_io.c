@@ -1,5 +1,7 @@
 /* Copyright (c) 1980 Regents of the University of California */
+/*
 static char *sccsid = "@(#)ex_io.c	6.2 10/23/80";
+*/
 #include "ex.h"
 #include "ex_argv.h"
 #include "ex_temp.h"
@@ -9,6 +11,12 @@ static char *sccsid = "@(#)ex_io.c	6.2 10/23/80";
 /*
  * File input/output, source, preserve and recover
  */
+
+static int gscan(void);
+static int samei(struct stat *, char *);
+static int edfile(void);
+static void wrerror(void);
+static int iostats(void);
 
 /*
  * Following remember where . was in the previous file for return
@@ -111,7 +119,8 @@ filename(int comm)
  * Get the argument words for a command into genbuf
  * expanding # and %.
  */
-getargs()
+int
+getargs(void)
 {
 	register int c;
 	register char *cp, *fp;
@@ -264,7 +273,8 @@ glob(struct glob *gp)
  * Scan genbuf for shell metacharacters.
  * Set is union of v7 shell and csh metas.
  */
-gscan()
+static int
+gscan(void)
 {
 	register char *cp;
 
@@ -277,7 +287,8 @@ gscan()
 /*
  * Parse one filename into file.
  */
-getone()
+void
+getone(void)
 {
 	register char *str;
 	struct glob G;
@@ -290,7 +301,6 @@ getone()
 	str = G.argv[G.argc0 - 1];
 	if (strlen(str) > FNSIZE - 4)
 		error("Filename too long");
-samef:
 	CP(file, str);
 }
 
@@ -406,7 +416,8 @@ rop(int c)
 	rop3(c);
 }
 
-rop2()
+void
+rop2(void)
 {
 
 	deletenone();
@@ -414,8 +425,8 @@ rop2()
 	ignore(append(getfile, addr2));
 }
 
-rop3(c)
-	int c;
+void
+rop3(int c)
 {
 
 	if (iostats() == 0 && c == 'e')
@@ -462,9 +473,8 @@ other:
 /*
  * Are these two really the same inode?
  */
-samei(sp, cp)
-	struct stat *sp;
-	char *cp;
+static int
+samei(struct stat *sp, char *cp)
 {
 	struct stat stb;
 
@@ -481,8 +491,9 @@ samei(sp, cp)
 /*
  * Write a file.
  */
-wop(dofname)
-bool dofname;	/* if 1 call filename, else use savedfile */
+void
+wop(bool dofname)
+/* bool dofname;	/ * if 1 call filename, else use savedfile */
 {
 	register int c, exclam, nonexist;
 	line *saddr1, *saddr2;
@@ -596,7 +607,8 @@ cre:
  * if this is a partial buffer, and distinguish
  * all cases.
  */
-edfile()
+static int
+edfile(void)
 {
 
 	if (!edited || !eq(file, savedfile))
@@ -609,7 +621,8 @@ edfile()
  */
 static	char *nextip;
 
-getfile()
+int
+getfile(void)
 {
 	int c;
 	register char *lp, *fp;
@@ -721,7 +734,8 @@ putfile(void)
  * the edited file then we consider it to have changed since it is
  * now likely scrambled.
  */
-wrerror()
+static void
+wrerror(void)
 {
 
 	if (eq(file, savedfile) && edited)
@@ -808,7 +822,8 @@ clrstats(void)
 /*
  * Io is finished, close the unit and print statistics.
  */
-iostats()
+static int
+iostats(void)
 {
 
 	close(io);

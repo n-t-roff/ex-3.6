@@ -370,7 +370,7 @@ vintr(int i)
 	(void)i;
 	signal(SIGINT, vintr);
 	if (vcatch)
-		onintr();
+		onintr(0);
 	ungetkey(ATTN);
 	draino();
 }

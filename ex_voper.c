@@ -6,7 +6,7 @@ static char *sccsid = "@(#)ex_voper.c	6.2 10/23/80";
 #include "ex_tty.h"
 #include "ex_vis.h"
 
-#define	blank()		isspace(wcursor[0])
+#define	blank()		isspace((int)wcursor[0])
 #define	forbid(a)	if (a) goto errlab;
 
 char	vscandir[2] =	{ '/', 0 };
@@ -271,7 +271,7 @@ ein:
 	 */
 	case ',':
 		forbid (lastFKND == 0);
-		c = isupper(lastFKND) ? tolower(lastFKND) : toupper(lastFKND);
+		c = isupper((int)lastFKND) ? tolower((int)lastFKND) : toupper((int)lastFKND);
 		i = lastFCHR;
 		if (vglobp == 0)
 			vglobp = "";
@@ -318,6 +318,7 @@ ein:
 			*lastcp++ = i;
 		}
 		if (vglobp == 0)
+			/* TODO: Initialized? (ck) */
 			lastFKND = c, lastFCHR = i;
 		for (; cnt > 0; cnt--)
 			forbid (find(i) == 0);
@@ -665,7 +666,7 @@ slerr:
 		if (any(*globp, "^+-."))
 			c = *globp++;
 		i = 0;
-		while (isdigit(*globp))
+		while (isdigit((int)*globp))
 			i = i * 10 + *globp++ - '0';
 		if (any(*globp, "^+-."))
 			c = *globp++;
@@ -818,7 +819,7 @@ int
 wordof(int which, char *wc)
 {
 
-	if (isspace(*wc))
+	if (isspace((int)*wc))
 		return (0);
 	return (!wdkind || wordch(wc) == which);
 }

@@ -765,7 +765,7 @@ int
 putch(int c)
 {
 
-	c &= 0177;
+	c &= TRIM;
 	*obp++ = c;
 	if (obp >= &obuf[sizeof obuf])
 		flusho();

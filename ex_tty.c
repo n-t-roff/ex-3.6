@@ -101,7 +101,7 @@ setterm(char *type)
 	arrows[3].cap = KR; arrows[3].mapto = "l"; arrows[3].descr = "right";
 	arrows[4].cap = KH; arrows[4].mapto = "H"; arrows[4].descr = "home";
 
-#ifdef TIOCLGET
+#if 0 /*def TIOCLGET*/
 	/*
 	 * Now map users susp char to ^Z, being careful that the susp
 	 * overrides any arrow key, but only for hackers (=new tty driver).

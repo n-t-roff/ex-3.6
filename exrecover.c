@@ -212,7 +212,7 @@ listfiles(char *dirname)
 {
 	DIR *dir;
 	struct dirent *dirent;
-	int ecount, qucmp();
+	int ecount;
 	register int f;
 	char *cp;
 	struct svfile *fp, svbuf[NENTRY];

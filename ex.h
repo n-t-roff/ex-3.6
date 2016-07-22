@@ -571,6 +571,7 @@ int	ex_getchar(void);
 int	getcd(void);
 int	peekchar(void);
 int	peekcd(void);
+void	onemt(int);
 
 /*
  * C doesn't have a (void) cast, so we have to fake it for lint's sake.

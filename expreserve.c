@@ -293,7 +293,7 @@ mknext(char *cp)
 	struct stat stb;
 
 	dcp = cp + strlen(cp) - 1;
-	while (isdigit(*dcp))
+	while (isdigit((int)*dcp))
 		dcp--;
 whoops:
 	if (dcp[0] == 'z') {

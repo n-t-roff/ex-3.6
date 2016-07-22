@@ -185,7 +185,7 @@ getn(char *cp)
 {
 	register int i = 0;
 
-	while (isdigit(*cp))
+	while (isdigit((int)*cp))
 		i = i * 10 + *cp++ - '0';
 	if (*cp)
 		return (0);
@@ -471,7 +471,7 @@ short	vcntcol;
 int
 qcolumn(char *lim, char *gp)
 {
-	register int x;
+	int x = 0;
 	void (*OO)();
 
 	OO = Outchar;
@@ -744,12 +744,12 @@ markit(line *addr)
  */
 #ifdef SIGEMT
 int _ovno;
-onemt()
-{
-	int oovno;
 
+void
+onemt(int i)
+{
+	(void)i;
 	signal(SIGEMT, onemt);
-	oovno = _ovno;
 	/* 2 and 3 are valid on 11/40 type vi, so */
 	if (_ovno < 0 || _ovno > 3)
 		_ovno = 0;

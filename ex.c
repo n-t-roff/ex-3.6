@@ -82,7 +82,6 @@ main(int ac, char **av)
 	bool ivis;
 	bool itag = 0;
 	bool fast = 0;
-	extern int onemt();
 #ifdef TRACE
 	register char *tracef;
 #endif
@@ -230,7 +229,7 @@ main(int ac, char **av)
 		case 'w':
 			defwind = 0;
 			if (av[0][2] == 0) defwind = 3;
-			else for (cp = &av[0][2]; isdigit(*cp); cp++)
+			else for (cp = &av[0][2]; isdigit((int)*cp); cp++)
 				defwind = 10*defwind + *cp - '0';
 			break;
 

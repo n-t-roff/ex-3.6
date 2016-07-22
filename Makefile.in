@@ -38,9 +38,10 @@ DEBUGFLAGS=	-g -O0 -fno-omit-frame-pointer -fno-optimize-sibling-calls \
 	-fsanitize=address
 NONDEBUGFLAGS=	
 DEB=	${NONDEBUGFLAGS}	# or ${DEBUGFLAGS} to to debug
-_CFLAGS=-DTABS=8 -DLISPCODE -DCHDIR -DUCVISUAL -DVMUNIX -DUSG3TTY \
+_CFLAGS=${CFLAGS} \
+	-DTABS=8 -DLISPCODE -DCHDIR -DUCVISUAL -DVMUNIX -DUSG3TTY \
 	${D_SBRK} -DLIBDIR='"${LIBDIR}"' ${DEB} -DBIT8
-_LDFLAGS=${DEB} -s
+_LDFLAGS=${LDFLAGS} ${DEB} ${DEFINES} -s
 OBJS=	ex.o ex_addr.o ex_cmds.o ex_cmds2.o ex_cmdsub.o \
 	ex_data.o ex_get.o ex_io.o ex_put.o ex_re.o \
 	ex_set.o ex_subr.o ex_temp.o ex_tty.o ex_unix.o \
@@ -59,16 +60,16 @@ ex_vars.h:
 	csh makeoptions ${CC} -E ${_CFLAGS}
 
 a.out: ${OBJS}
-	${CC} ${LDFLAGS} ${_LDFLAGS} ${OBJS} ${TERMLIB}
+	${CC} ${_LDFLAGS} ${OBJS} ${TERMLIB}
 
 exrecover: exrecover.o
-	${CC} ${LDFLAGS} ${_LDFLAGS} -o $@ exrecover.o
+	${CC} ${_LDFLAGS} -o $@ exrecover.o
 
 expreserve: expreserve.o
-	${CC} ${LDFLAGS} ${_LDFLAGS} -o $@ expreserve.o
+	${CC} ${_LDFLAGS} -o $@ expreserve.o
 
 .c.o:
-	${CC} ${CFLAGS} ${_CFLAGS} -c $<
+	${CC} ${_CFLAGS} -c $<
 
 clean:
 #	If we dont have ex we cant make it so dont rm ex_vars.h

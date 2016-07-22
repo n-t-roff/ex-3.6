@@ -1,5 +1,7 @@
 /* Copyright (c) 1980 Regents of the University of California */
+/*
 static char *sccsid = "@(#)ex_cmds2.c	6.1 10/18/80";
+*/
 #include "ex.h"
 #include "ex_argv.h"
 #include "ex_temp.h"
@@ -19,7 +21,8 @@ static void setflav(void);
 /*
  * Is there a single letter indicating a named buffer next?
  */
-cmdreg()
+int
+cmdreg(void)
 {
 	register int c = 0;
 	register int wh = skipwh();
@@ -32,8 +35,8 @@ cmdreg()
 /*
  * Tell whether the character ends a command
  */
-endcmd(ch)
-	int ch;
+int
+endcmd(int ch)
 {
 	switch (ch) {
 	

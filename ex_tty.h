@@ -145,10 +145,11 @@ bool	normtty;		/* Have to restore normal mode from normf */
 
 ttymode ostart(void),
 	setty(ttymode),
-	unixex();
+	unixex(char *, char *, int, int);
 void	ostop(ttymode);
 void	tostop(void);
 void	gTTY(int);
+void	unixwt(bool, ttymode);
 
 short	WBOT;
 short	WECHO;

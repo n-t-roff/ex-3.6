@@ -29,8 +29,8 @@ void
 operate(int c, int cnt)
 {
 	register int i;
-	int (*moveop)(), (*deleteop)();
-	register int (*opf)();
+	void (*moveop)(), (*deleteop)();
+	void (*opf)();
 	bool subop = 0;
 	char *oglobp, *ocurs;
 	register line *addr;
@@ -65,7 +65,7 @@ operate(int c, int cnt)
 	 * c		Change operator.
 	 */
 	case 'c':
-		if (c == 'c' && workcmd[0] == 'C' || workcmd[0] == 'S')
+		if ((c == 'c' && workcmd[0] == 'C') || workcmd[0] == 'S')
 			subop++;
 		moveop = vchange;
 		deleteop = beep;
@@ -400,7 +400,7 @@ fixup:
 		forbid (margin() || opf == vmove && edge());
 		while (cnt > 0 && !margin())
 			wcursor += dir, cnt--;
-		if (margin() && opf == vmove || wcursor < linebuf)
+		if ((margin() && opf == vmove) || wcursor < linebuf)
 			wcursor -= dir;
 		vmoving = 0;
 		break;

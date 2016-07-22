@@ -1,5 +1,7 @@
 /* Copyright (c) 1980 Regents of the University of California */
+/*
 static char *sccsid = "@(#)ex_v.c	6.1 10/18/80";
+*/
 #include "ex.h"
 #include "ex_re.h"
 #include "ex_tty.h"
@@ -47,13 +49,20 @@ static char *sccsid = "@(#)ex_v.c	6.1 10/18/80";
  *		absolute motions, contextual displays, line depth determination
  */
 
+static void ovbeg(void);
+static void ovend(ttymode);
+static void setwind(void);
+static void vok(char *);
+
+static char atube[TUBESIZE + LBSIZE];
+
 /*
  * Enter open mode
  */
-oop()
+void
+oop(void)
 {
 	register char *ic;
-	static char atube[TUBESIZE + LBSIZE];
 	register ttymode f;
 
 	ovbeg();
@@ -114,7 +123,8 @@ oop()
 	ovend(f);
 }
 
-ovbeg()
+static void
+ovbeg(void)
 {
 
 	if (!value(OPEN))
@@ -128,8 +138,8 @@ ovbeg()
 	dot = addr2;
 }
 
-ovend(f)
-	ttymode f;
+static void
+ovend(ttymode f)
 {
 
 	splitw++;
@@ -154,7 +164,6 @@ void
 vop(void)
 {
 	register int c;
-	static char atube[TUBESIZE + LBSIZE];
 	register ttymode f;
 
 	if (!CA && UP == NOSTR) {
@@ -211,7 +220,8 @@ toopen:
  * empty buffer since routines internally
  * demand at least one line.
  */
-fixzero()
+void
+fixzero(void)
 {
 
 	if (dol == zero) {
@@ -254,7 +264,8 @@ savevis(void)
  * Restore a sensible state after a visual/open, moving the saved
  * stuff back to [unddol,dol], and killing the partial line kill indicators.
  */
-undvis()
+void
+undvis(void)
 {
 
 	if (ruptible)
@@ -274,7 +285,8 @@ undvis()
  * Set the window parameters based on the base state bastate
  * and the available buffer space.
  */
-setwind()
+static void
+setwind(void)
 {
 
 	WCOLS = COLUMNS;
@@ -313,8 +325,8 @@ setwind()
  * If so, then divide the screen buffer up into lines,
  * and initialize a bunch of state variables before we start.
  */
-vok(atube)
-	register char *atube;
+static void
+vok(char *atube)
 {
 	register int i;
 
@@ -352,9 +364,10 @@ vok(atube)
 }
 
 #ifdef CBREAK
-vintr()
+void
+vintr(int i)
 {
-
+	(void)i;
 	signal(SIGINT, vintr);
 	if (vcatch)
 		onintr();

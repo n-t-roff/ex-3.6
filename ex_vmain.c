@@ -29,7 +29,8 @@ vmain(void)
 	line *addr;
 	int ind, nlput;
 	int shouldpo = 0;
-	int onumber, olist, (*OPline)(), (*OPutchar)();
+	int onumber, olist;
+	void (*OPline)(), (*OPutchar)();
 
 	vch_mac = VC_NOTINMAC;
 
@@ -72,7 +73,7 @@ vmain(void)
 		Xhadcnt = hadcnt = 0;
 		Xcnt = cnt = 1;
 		splitw = 0;
-		if (i = holdupd) {
+		if ((i = holdupd)) {
 			if (state == VISUAL)
 				ignore(peekkey());
 			holdupd = 0;
@@ -742,7 +743,7 @@ insrt:
 			vmacchng(1);
 			setLAST();
 			i = 0;
-			if (vreg && partreg(vreg) || !vreg && pkill[0]) {
+			if ((vreg && partreg(vreg)) || (!vreg && pkill[0])) {
 				/*
 				 * Restoring multiple lines which were partial
 				 * lines; will leave cursor in middle
@@ -775,7 +776,7 @@ insrt:
 			 */
 			addr = dol;	/* old dol */
 			CATCH
-				vremote(1, vreg ? putreg : put, vreg);
+				vremote(1, vreg ? putreg : (void (*)(int))put, vreg);
 			ONERR
 				if (vreg == -1) {
 					splitw = 0;
@@ -1033,7 +1034,7 @@ fixup:
 			if (i < 0
 			    || (vcnt >= 0 && i >= vcnt)
 			    || (vcnt < 0 && i >= -vcnt)
-			    || state != VISUAL && dot != addr) {
+			    || (state != VISUAL && dot != addr)) {
 				if (state == CRTOPEN)
 					vup1();
 				if (vcnt > 0)
@@ -1181,7 +1182,7 @@ vsave(void)
 	char temp[LBSIZE];
 
 	CP(temp, linebuf);
-	if (FIXUNDO && vundkind == VCHNG || vundkind == VCAPU) {
+	if ((FIXUNDO && vundkind == VCHNG) || vundkind == VCAPU) {
 		/*
 		 * If the undo state is saved in the temporary buffer
 		 * vutmp, then we sync this into the temp file so that
@@ -1193,7 +1194,7 @@ vsave(void)
 		prepapp();
 		strcLIN(vutmp);
 		putmark(dot);
-		vremote(1, yank, 0);
+		vremote(1, (void (*)(int))yank, 0);
 		vundkind = VMCHNG;
 		notecnt = 0;
 		undkind = UNDCHANGE;

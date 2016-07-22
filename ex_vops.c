@@ -70,7 +70,7 @@ vundo(bool show)
 	register char *cp;
 	char temp[LBSIZE];
 	bool savenote;
-	int (*OO)();
+	void (*OO)();
 	short oldhold = hold;
 
 	switch (vundkind) {
@@ -98,12 +98,13 @@ vundo(bool show)
 		 * with dol through unddol-1.  Hack screen image to
 		 * reflect this replacement.
 		 */
-		if (show)
+		if (show) {
 			if (undkind == UNDMOVE)
 				vdirty(0, EX_LINES);
 			else
 				vreplace(undap1 - addr, undap2 - undap1,
 				    undkind == UNDPUT ? 0 : unddol - dol);
+		}
 		savenote = notecnt;
 		undo(1);
 		if (show && (vundkind != VMCHNG || addr != dot))
@@ -182,8 +183,6 @@ vmacchng(bool fromvis)
 	char *savecursor;
 	char savelb[LBSIZE];
 	int nlines, more;
-	register line *a1, *a2;
-	char ch;	/* DEBUG */
 
 	if (!inopen)
 		return;
@@ -372,7 +371,7 @@ vdelete(int c)
 			vputchar('@');
 		}
 		wdot = dot;
-		vremote(i, delete, 0);
+		vremote(i, (void (*)(int))delete, 0);
 		notenam = "delete";
 		DEL[0] = 0;
 		killU();
@@ -492,7 +491,7 @@ vchange(int c)
 		 * case we are told to put.
 		 */
 		addr = dot;
-		vremote(cnt, delete, 0);
+		vremote(cnt, (void (*)(int))delete, 0);
 		setpk();
 		notenam = "delete";
 		if (c != 'd')
@@ -637,7 +636,7 @@ voOpen(int c, int cnt)
 	register int ind = 0, i;
 	short oldhold = hold;
 
-	if (value(SLOWOPEN) || value(REDRAW) && AL && DL)
+	if (value(SLOWOPEN) || (value(REDRAW) && AL && DL))
 		cnt = 1;
 	vsave();
 	setLAST();
@@ -705,7 +704,7 @@ vshftop(void)
 	if ((cnt = xdw()) < 0)
 		return;
 	addr = dot;
-	vremote(cnt, vshift, 0);
+	vremote(cnt, (void (*)(int))vshift, 0);
 	vshnam[0] = op;
 	notenam = vshnam;
 	dot = addr;

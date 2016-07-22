@@ -364,7 +364,7 @@ void	put(void);
 void	putreg(int);
 void	YANKreg(int);
 void	delete(bool);
-int	filter();
+void	filter(int);
 int	getfile();
 int	getsub();
 int	gettty();
@@ -381,7 +381,7 @@ void	shift(int, int);
 void	termchar(int);
 void	vfilter(void);
 #ifdef CBREAK
-int	vintr();
+void	vintr(int);
 #endif
 int	vputch();
 void	vshftop(void);
@@ -526,6 +526,12 @@ void	TSYNC(void);
 int	partreg(int);
 void	notpart(int);
 void	regbuf(int, char *, int);
+void	unix0(bool);
+void	recover(void);
+void	waitfor(void);
+void	revocer(void);
+int	endcmd(int);
+int	cmdreg(void);
 
 /*
  * C doesn't have a (void) cast, so we have to fake it for lint's sake.

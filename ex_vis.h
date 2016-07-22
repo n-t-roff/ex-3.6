@@ -328,3 +328,6 @@ void	vremote(int, void (*)(int), int);
 void	vundo(bool);
 void	vnoapp(void);
 void	voOpen(int, int);
+void	oop(void);
+void	fixzero(void);
+void	undvis(void);

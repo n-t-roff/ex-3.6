@@ -276,11 +276,12 @@ main(int ac, char **av)
 		if (ac == 0) {
 			ppid = 0;
 			setrupt();
-			execl(EXRECOVER, "exrecover", "-r", 0);
+			execl(EXRECOVER, "exrecover", "-r", NULL);
 			filioerr(EXRECOVER);
 			ex_exit(1);
 		}
-		CP(savedfile, *av++), ac--;
+		CP(savedfile, *av);
+		av++, ac--;
 	}
 
 	/*
@@ -299,7 +300,7 @@ main(int ac, char **av)
 		setrupt();
 		intty = isatty(0);
 		value(PROMPT) = intty;
-		if (cp = getenv("SHELL"))
+		if ((cp = getenv("SHELL")))
 			CP(shell, cp);
 		if (fast || !intty)
 			setterm("dumb");
@@ -309,7 +310,7 @@ main(int ac, char **av)
 				setterm(cp);
 		}
 	}
-	if (setexit() == 0 && !fast && intty)
+	if (setexit() == 0 && !fast && intty) {
 		if ((globp = getenv("EXINIT")) && *globp)
 			commands(1,1);
 		else {
@@ -317,6 +318,7 @@ main(int ac, char **av)
 			if ((cp = getenv("HOME")) != 0 && *cp)
 				source(strcat(strcpy(genbuf, cp), "/.exrc"), 1);
 		}
+	}
 	init();	/* moved after prev 2 chunks to fix directory option */
 
 	/*
@@ -445,6 +447,7 @@ onhup(int i)
 void
 onintr(int i)
 {
+	char *s = "\nInterrupt";
 	(void)i;
 #ifndef CBREAK
 	signal(SIGINT, onintr);
@@ -461,7 +464,7 @@ onintr(int i)
 	} else
 		vraw();
 #endif
-	error("\nInterrupt" + inopen);
+	error(inopen ? s + 1 : s);
 }
 
 /*

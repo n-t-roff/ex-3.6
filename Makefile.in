@@ -53,10 +53,10 @@ all:	a.out exrecover expreserve #tags
 tags:	/tmp
 	${CTAGS} -w ex.[hc] ex_*.[hc]
 
-${OBJS}: ex_vars.h
+${OBJS}: #ex_vars.h
 
-# ex_vars.h:
-# 	csh makeoptions ${_CFLAGS}
+ex_vars.h:
+	csh makeoptions ${CC} -E ${_CFLAGS}
 
 a.out: ${OBJS}
 	${CC} ${LDFLAGS} ${_LDFLAGS} ${OBJS} ${TERMLIB}

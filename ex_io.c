@@ -236,7 +236,7 @@ glob(struct glob *gp)
 		close(pvec[0]);
 		close(2);	/* so errors don't mess up the screen */
 		open("/dev/null", O_WRONLY);
-		execl(svalue(SHELL), "sh", "-c", genbuf, 0);
+		execl(svalue(SHELL), "sh", "-c", genbuf, NULL);
 		oerrno = errno; close(1); dup(2); errno = oerrno;
 		filioerr(svalue(SHELL));
 	}

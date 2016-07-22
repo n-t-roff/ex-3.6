@@ -8,7 +8,7 @@ ex - /tmp/$$.c <<'%'
 	w
 	q
 '%'
-cc -E $* /tmp/$$.c >/tmp/foo.c
+$* /tmp/$$.c >/tmp/foo.c
 ex - /tmp/foo.c <<'X'
 	" delete all preprocessor output (# line, etc)
 	g/^# /d
@@ -16,14 +16,15 @@ ex - /tmp/foo.c <<'X'
 	" delete junk (all but data lines)
 	g/^[ 	]*$/d
 	1,/option options/d
-	/}/-1,$d
+	/};/-1,$d
 	" get rid of all of line but option name
-	1,$s/	"//
+	1,$s/[ 	]*{ "//
+	w! /tmp/t
 	1,$s/".*//
 	1m$	" kludge since options start at 0 but num at 1
-	%!num
+	%!cat -n
 	$t0	" unkludge
-	1s/......../     0  /	" unkludge
+	1s/....../     0/	" unkludge
 	" make #define lines
 	1,$s/\(......\)\(.*\)/#define	\U\2\L	\1/
 	" get rid of extra blanks, turning into (single) tabs.
